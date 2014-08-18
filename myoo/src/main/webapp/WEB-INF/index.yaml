@@ -1,0 +1,10 @@
+indexes:
+- kind: Record
+  ancestor: no
+  properties:
+  - name: projectId
+    direction: asc
+  - name: userId
+    direction: asc
+  - name: createdTs
+    direction: asc

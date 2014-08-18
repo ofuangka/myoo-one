@@ -1,0 +1,11 @@
+a, .cursor-pointer {
+    cursor: pointer;
+}
+.padding-md {
+    padding: 10px;
+}
+.achievementIcon {
+	max-width: 48px !important;
+	width: 48px !important;
+	height: 48px !important;
+}
