@@ -22,6 +22,7 @@ public class BaseController {
 		if ((userEntities == null) || (userEntities.size() == 0)) {
 			Entity userEntity = new Entity("User");
 			userEntity.setProperty("email", currentUser.getEmail());
+			userEntity.setProperty("nickname", currentUser.getNickname());
 			userKey = datastore.put(userEntity);
 		} else {
 			if (userEntities.size() > 1) {

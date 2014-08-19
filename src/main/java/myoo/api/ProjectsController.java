@@ -24,6 +24,7 @@ import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.users.User;
 
 @Controller
@@ -216,15 +217,14 @@ public class ProjectsController extends BaseController {
 	public View deleteAchievement(@PathVariable String projectId, @PathVariable String achievementId, ModelMap model) {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
-		datastore.delete(new Key[] { KeyFactory.createKey("Achievement", Long.valueOf(achievementId).longValue()) });
+		datastore.delete(KeyFactory.createKey("Achievement", Long.valueOf(achievementId).longValue()));
 
 		return new MappingJackson2JsonView();
 	}
 
 	protected List<Entity> getAchievementsByProjectId(String projectId, DatastoreService datastore) {
 		Query query = new Query("Achievement");
-		query.setFilter(new Query.FilterPredicate("projectId", Query.FilterOperator.EQUAL, projectId));
-
+		query.setFilter(FilterOperator.EQUAL.of("projectId", projectId));
 		return datastore.prepare(query).asList(FetchOptions.Builder.withDefaults());
 	}
 }

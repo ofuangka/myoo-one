@@ -24,6 +24,8 @@ import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
+import com.google.appengine.api.datastore.Query.FilterOperator;
 
 @Controller
 public class RecordsController extends BaseController {
@@ -92,20 +94,19 @@ public class RecordsController extends BaseController {
 	}
 
 	private Query.Filter getRecordFilter(String userId) {
-		return Query.FilterOperator.EQUAL.of("userId", userId);
+		return FilterOperator.EQUAL.of("userId", userId);
 	}
 
 	private Query.Filter getRecordFilterByProjectId(String projectId, String userId) {
 		Calendar todayCal = Calendar.getInstance();
 
 		todayCal.set(todayCal.get(1), todayCal.get(2), todayCal.get(5), 0, 0, 0);
-		return Query.CompositeFilterOperator.and(new Query.Filter[] { Query.FilterOperator.EQUAL.of("projectId", projectId),
-				Query.FilterOperator.EQUAL.of("userId", userId), Query.FilterOperator.GREATER_THAN_OR_EQUAL.of("createdTs", todayCal.getTime()) });
+		return CompositeFilterOperator.and(FilterOperator.EQUAL.of("projectId", projectId), FilterOperator.EQUAL.of("userId", userId),
+				FilterOperator.GREATER_THAN_OR_EQUAL.of("createdTs", todayCal.getTime()));
 	}
 
 	private Query.Filter getRecordFilterByAchievementId(String achievementId, String userId) {
-		return Query.CompositeFilterOperator.and(new Query.Filter[] { Query.FilterOperator.EQUAL.of("achievementId", achievementId),
-				Query.FilterOperator.EQUAL.of("userId", userId) });
+		return CompositeFilterOperator.and(FilterOperator.EQUAL.of("achievementId", achievementId), FilterOperator.EQUAL.of("userId", userId));
 	}
 
 	private Achievement getAchievement(String achievementId, DatastoreService datastore) throws NumberFormatException, EntityNotFoundException {

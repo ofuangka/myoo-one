@@ -4,17 +4,6 @@
 <title>/myoo/</title>
 <link rel="stylesheet"
 	href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
-<link rel="stylesheet"
-	href="http://cdn.kendostatic.com/2014.1.318/styles/kendo.common.min.css" />
-<link
-	href="http://cdn.kendostatic.com/2014.1.318/styles/kendo.default.min.css"
-	rel="stylesheet" />
-<link
-	href="http://cdn.kendostatic.com/2014.1.318/styles/kendo.dataviz.min.css"
-	rel="stylesheet" />
-<link
-	href="http://cdn.kendostatic.com/2014.1.318/styles/kendo.dataviz.default.min.css"
-	rel="stylesheet" />
 <link rel="stylesheet" href="css/myoo.css" />
 
 <meta name="viewport"
@@ -97,6 +86,9 @@
 	<script
 		src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 	<script src="https://www.google.com/jsapi"></script>
+	<script>
+		google.load('visualization', '1.0', {'packages':['corechart']});
+	</script>
 	<script src="myoo.js"></script>
 	<script src="filters/dash.js"></script>
 	<script src="directives/blur-save.js"></script>
