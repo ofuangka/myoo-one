@@ -105,7 +105,7 @@ public class ReviewController extends BaseController {
 		Integer ret = 0;
 		if (recordEntities != null) {
 			for (Entity recordEntity : recordEntities) {
-				ret += (Integer) recordEntity.getProperty("points");
+				ret += ((Long) recordEntity.getProperty("points")).intValue();
 			}
 		}
 		return ret;
