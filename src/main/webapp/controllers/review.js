@@ -1,11 +1,17 @@
 angular.module('myooApp').controller('reviewCtrl', function($scope, $filter, $http, FN_AJAX_FAILURE) {
 	var dateFilter = $filter('date'),
+		today = new Date(),
 		lastWeek = new Date(),
+		lastMonth = new Date(),
 		selections = [ {
 			name : 'Comparison',
 			id : 'comparison'
+		}, {
+			name : 'Achievements',
+			id : 'achievements'
 		} ];
 	lastWeek.setDate(lastWeek.getDate() - 7);
+	lastMonth.setMonth(lastWeek.getMonth() - 1);
 	var getComparisonData = function(comparison) {
 		var arr = [],
 			header = ['Date'],
@@ -15,7 +21,7 @@ angular.module('myooApp').controller('reviewCtrl', function($scope, $filter, $ht
 		}
 		arr.push(header);
 		for (var i = 0, len = comparison.dates.length; i < len; i++) {
-			dateBuf = [comparison.dates[i]];
+			dateBuf = [dateFilter(comparison.dates[i])];
 			for (user in comparison.users) {
 				dateBuf.push(comparison.users[user][i]);
 			}
@@ -39,12 +45,20 @@ angular.module('myooApp').controller('reviewCtrl', function($scope, $filter, $ht
 	
 	$scope.userState.review = {
 		from : lastWeek,
-		to : new Date(),
+		to : today,
 		selections : selections,
 		currentSelection : selections[0]
 	};
 	$scope.changeReviewSelection = function(selection) {
 		$scope.userState.review.currentSelection = selection;
+	};
+	$scope.set1Week = function() {
+		$scope.userState.review.to = today;
+		$scope.userState.review.from = lastWeek;
+	};
+	$scope.set1Month = function() {
+		$scope.userState.review.to = today;
+		$scope.userState.review.from = lastMonth;
 	};
 	$scope.$watch('userState.review', function(newValue, oldValue) {
 		$http.get('api/projects/' + $scope.userState.currentProjectId + '/review/' + newValue.currentSelection.id, {
@@ -53,8 +67,13 @@ angular.module('myooApp').controller('reviewCtrl', function($scope, $filter, $ht
 				to : dateFilter(newValue.to, 'yyyy-MM-dd')
 			}
 		}).then(function(response) {
-			(new google.visualization.ColumnChart(document.getElementById('chart'))).draw(getChartData(response.data), {
-				
+			(new google.visualization.ColumnChart(document.getElementById('reviewChart'))).draw(getChartData(response.data), {
+				vAxis : {
+					format : '#,###.##\u03BC',
+					viewWindow : {
+						min : 0
+					}
+				}
 			});
 		}, FN_AJAX_FAILURE);
 	}, true);

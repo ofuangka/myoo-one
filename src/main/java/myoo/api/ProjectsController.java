@@ -72,7 +72,12 @@ public class ProjectsController extends BaseController {
 		projectEntity.setProperty("lastUpdatedTs", now);
 
 		Key key = datastore.put(projectEntity);
-
+		
+		Entity selectedProjectEntity = new Entity("SelectedProject");
+		selectedProjectEntity.setProperty("projectId", String.valueOf(key.getId()));
+		selectedProjectEntity.setProperty("userId", getUserId(datastore));
+		datastore.put(selectedProjectEntity);
+		
 		project.setId(String.valueOf(key.getId()));
 		project.setCreatedBy(currentUser.getNickname());
 		project.setLastUpdatedBy(currentUser.getNickname());
@@ -111,6 +116,15 @@ public class ProjectsController extends BaseController {
 	public View deleteProject(@PathVariable String projectId, ModelMap model) {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
+		List<Entity> selectedProjectEntities = getSelectedProjectEntitiesByProjectId(projectId, datastore);
+		if (selectedProjectEntities != null) {
+			List<Key> selectedProjectKeys = new ArrayList<Key>();
+			for (Entity entity : selectedProjectEntities) {
+				selectedProjectKeys.add(entity.getKey());
+			}
+			datastore.delete(selectedProjectKeys);
+		}
+
 		List<Entity> achievementEntities = getAchievementsByProjectId(projectId, datastore);
 		if (achievementEntities != null) {
 			List<Key> achievementKeys = new ArrayList<Key>();
@@ -122,6 +136,13 @@ public class ProjectsController extends BaseController {
 		datastore.delete(new Key[] { KeyFactory.createKey("Project", Long.valueOf(projectId).longValue()) });
 
 		return new MappingJackson2JsonView();
+	}
+
+	private List<Entity> getSelectedProjectEntitiesByProjectId(String projectId, DatastoreService datastore) {
+		String userId = getUserId(datastore);
+		Query query = new Query("SelectedProject");
+		query.setFilter(FilterOperator.EQUAL.of("userId", userId));
+		return datastore.prepare(query).asList(FetchOptions.Builder.withDefaults());
 	}
 
 	@RequestMapping(value = { "/{projectId}/achievements" }, method = { org.springframework.web.bind.annotation.RequestMethod.GET })

@@ -15,15 +15,17 @@
 					<td><label for="projectName">Project name</label> <input
 						id="projectName"
 						data-ng-model="(getProjectById(userState.currentProjectId)).name"
-						class="form-control" data-blur-save="'api/projects'"
-						data-blur-save-post-data="(getProjectById(userState.currentProjectId))" /></td>
+						class="form-control" data-save-on-event="blur"
+						data-save-url="'api/projects'"
+						data-save-post-data="(getProjectById(userState.currentProjectId))" /></td>
 				</tr>
 				<tr class="form-group">
 					<td><label for="projectDescription">Project
 							description</label> <input id="projectDescription"
 						data-ng-model="(getProjectById(userState.currentProjectId)).description"
-						class="form-control" data-blur-save="'api/projects'"
-						data-blur-save-post-data="(getProjectById(userState.currentProjectId))" /></td>
+						class="form-control" data-save-on-event="blur"
+						data-save-url="'api/projects'"
+						data-save-post-data="(getProjectById(userState.currentProjectId))" /></td>
 				</tr>
 				<!-- 
                 <tr class="form-group">
@@ -52,18 +54,20 @@
 			<tbody>
 				<tr data-ng-repeat="achievement in userState.achievements">
 					<td><input data-ng-model="achievement.name"
-						class="form-control" placeholder="Name"
-						data-blur-save="'api/projects/' + userState.currentProjectId + '/achievements'"
-						data-blur-save-post-data="achievement" /></td>
+						class="form-control" placeholder="Name" data-save-on-event="blur"
+						data-save-url="'api/projects/' + userState.currentProjectId + '/achievements'"
+						data-save-post-data="achievement" /></td>
 					<td><input data-ng-model="achievement.description"
 						class="form-control" placeholder="Description"
-						data-blur-save="'api/projects/' + userState.currentProjectId + '/achievements'"
-						data-blur-save-post-data="achievement" /></td>
+						data-save-on-event="blur"
+						data-save-url="'api/projects/' + userState.currentProjectId + '/achievements'"
+						data-save-post-data="achievement" /></td>
 					<td><input data-ng-model="
 						achievement.points"
 						type="number" class="form-control" placeholder="Points"
-						data-blur-save="'api/projects/' + userState.currentProjectId + '/achievements'"
-						data-blur-save-post-data="achievement" /></td>
+						data-save-on-event="blur"
+						data-save-url="'api/projects/' + userState.currentProjectId + '/achievements'"
+						data-save-post-data="achievement" /></td>
 					<td class="text-center"><a
 						data-ng-click="deleteAchievement(achievement)">Delete</a></td>
 				</tr>

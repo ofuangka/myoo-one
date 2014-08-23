@@ -26,7 +26,6 @@ import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Query;
-import com.google.appengine.api.datastore.Query.CompositeFilter;
 import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
 import com.google.appengine.api.datastore.Query.Filter;
 import com.google.appengine.api.datastore.Query.FilterOperator;
@@ -72,16 +71,16 @@ public class ReviewController extends BaseController {
 						points.add(getPointsByProjectByUserByDate(projectId, memberId, date, datastore));
 					}
 
-					String memberEmail = null;
+					String memberNickname = null;
 					try {
-						memberEmail = getNicknameByUserId(memberId, datastore);
+						memberNickname = getNicknameByUserId(memberId, datastore);
 					} catch (EntityNotFoundException e) {
 						// TODO: figure out logging
 					}
 
-					if (memberEmail != null) {
+					if (memberNickname != null) {
 
-						users.put(memberEmail, points);
+						users.put(memberNickname, points);
 					}
 				}
 
@@ -112,20 +111,15 @@ public class ReviewController extends BaseController {
 	}
 
 	private Filter getFilterByProjectByUserByDate(String projectId, String userId, Date date) {
-		Calendar fromCal = Calendar.getInstance();
 		Calendar toCal = Calendar.getInstance();
-		fromCal.setTime(date);
 		toCal.setTime(date);
-		fromCal.set(Calendar.HOUR_OF_DAY, 0);
-		fromCal.set(Calendar.MINUTE, 0);
-		fromCal.set(Calendar.SECOND, 0);
 		toCal.set(Calendar.HOUR_OF_DAY, 23);
 		toCal.set(Calendar.MINUTE, 59);
 		toCal.set(Calendar.SECOND, 59);
-		Date from = fromCal.getTime();
+		toCal.set(Calendar.MILLISECOND, 999);
 		Date to = toCal.getTime();
 		return CompositeFilterOperator.and(FilterOperator.EQUAL.of("projectId", projectId), FilterOperator.EQUAL.of("userId", userId),
-				FilterOperator.GREATER_THAN_OR_EQUAL.of("createdTs", from), FilterOperator.LESS_THAN_OR_EQUAL.of("createdTs", to));
+				FilterOperator.LESS_THAN_OR_EQUAL.of("createdTs", to));
 	}
 
 	private List<Date> parseDates(String fromString, String toString) {

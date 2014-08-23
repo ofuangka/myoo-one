@@ -14,6 +14,9 @@ angular.module('myooApp', ['ngRoute'])
     	$('#alertBox').modal({
         	show : false
         });
+    	$('#preferencesBox').modal({
+    		show : false
+    	});
         $routeProvider.when('/project/:projectId/section/:sectionId', {
             templateUrl : function getTemplateUrl(routeParams) {
                 var ret = 'partials/' + DEFAULT_SECTION_ID + '.html';
@@ -41,6 +44,7 @@ angular.module('myooApp', ['ngRoute'])
     .controller('rootCtrl', function($scope, $route, $http, FN_AJAX_FAILURE, SECTIONS) {
         $scope.userState = {
             sections : SECTIONS,
+            selectedProjects : {},
             achievementsPromises : {},
             recordsPromises : {}
         };
@@ -53,11 +57,29 @@ angular.module('myooApp', ['ngRoute'])
         		name : '...',
         		description : '...'
         	}).then(function onAjaxSuccess(response) {
+        		$scope.userState.selectedProjects[response.data.project.id] = true;
                 $scope.userState.projects.push(response.data.project);
         	}, FN_AJAX_FAILURE);
         };
-        $http.get('api/projects').then(function onAjaxSuccess(response) {
-            $scope.userState.projects = response.data.projects;            
+        $scope.showPreferences = function() {
+        	$('#preferencesBox').modal('show');
+        };
+        $scope.confirmClearPoints = function(project) {
+        	var choice = confirm('Are you sure you want to clear your points on this project? This operation cannot be undone.');
+        	if (choice) {
+        		// TODO: do something
+        	}
+        }
+        $http.get('api/selected-projects').then(function onAjaxSuccess(response) {
+        	$scope.userState.selectedProjects = response.data.selectedProjects;
+        	$scope.$watch('userState.selectedProjects', function saveSelectedProjects(newValue, oldValue) {
+        		$http.post('api/selected-projects', newValue).then(function onAjaxSuccess(response) {
+        			
+                    $http.get('api/projects').then(function onAjaxSuccess(response) {
+                        $scope.userState.projects = response.data.projects;            
+                    }, FN_AJAX_FAILURE);
+        		}, FN_AJAX_FAILURE);
+        	}, true);
         }, FN_AJAX_FAILURE);
         $http.get('api/projects/all/achievements/all/records').then(function onAjaxSuccess(response) {
         	var records = response.data.records;

@@ -17,7 +17,8 @@
 		<div class="panel panel-info">
 			<div class="panel-heading">
 				<div class="pull-right" data-ng-cloak>
-					Welcome, ${currentUser.nickname}! <span class="badge"
+					Welcome, <a data-ng-click="showPreferences()">${currentUser.nickname}!</a>
+					<span class="badge"
 						title="You have {{ userState.totalPoints }}&mu;." data-ng-cloak>{{
 						userState.totalPoints }}&mu;</span> <a href="${logoutUrl}">Sign out</a>
 				</div>
@@ -78,6 +79,51 @@
 			</div>
 		</div>
 	</div>
+	<div id="preferencesBox" class="modal fade" tabindex="-1" role="dialog"
+		aria-labelledby="Preferences" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">
+						<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+					</button>
+					<h4 id="preferencesBoxTitle" class="modal-title">Preferences</h4>
+				</div>
+				<div id="preferencesBoxBody" class="modal-body">
+					<table data-ng-if="userState.projects.length > 0" class="table table-bordered table-striped table-hover">
+						<thead>
+							<tr><th colspan="3">Subscribed projects</th></tr>
+						</thead>
+						<thead>
+							<tr>
+								<th></th>
+								<th>Project name</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr
+								data-ng-repeat="project in userState.projects | orderBy : 'name'">
+								<td width="1%"><input type="checkbox"
+									data-ng-model="userState.selectedProjects[project.id]" /></td>
+								<td>{{ project.name }}</td>
+								<td width="1%"><button type="button"
+										class="btn btn-default"
+										data-ng-click="confirmClearPoints(project)">Clear
+										points</button>
+							</tr>
+						</tbody>
+					</table>
+					<p data-ng-if="userState.projects.length === 0">
+						There are currently no projects to have preferences on.
+					</p>
+				</div>
+				<div id="preferencesBoxFooter" class="modal-footer">
+					<button type="button" class="btn btn-primary" data-dismiss="modal">Done</button>
+				</div>
+			</div>
+		</div>
+	</div>
 	<script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-beta.16/angular.min.js"></script>
@@ -87,11 +133,13 @@
 		src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 	<script src="https://www.google.com/jsapi"></script>
 	<script>
-		google.load('visualization', '1.0', {'packages':['corechart']});
+		google.load('visualization', '1.0', {
+			'packages' : [ 'corechart' ]
+		});
 	</script>
 	<script src="myoo.js"></script>
 	<script src="filters/dash.js"></script>
-	<script src="directives/blur-save.js"></script>
+	<script src="directives/save-on-event.js"></script>
 	<script src="controllers/record.js"></script>
 	<script src="controllers/review.js"></script>
 	<script src="controllers/config.js"></script>
