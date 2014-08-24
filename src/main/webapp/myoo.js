@@ -69,7 +69,10 @@ angular.module('myooApp', ['ngRoute'])
         	if (choice) {
         		// TODO: do something
         	}
-        }
+        };
+        $scope.inSelectedProjects = function(project) {
+        	return $scope.userState.selectedProjects[project.id];
+        };
         $http.get('api/selected-projects').then(function onAjaxSuccess(response) {
         	$scope.userState.selectedProjects = response.data.selectedProjects;
         	$scope.$watch('userState.selectedProjects', function saveSelectedProjects(newValue, oldValue) {

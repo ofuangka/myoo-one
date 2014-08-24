@@ -157,7 +157,14 @@ public class ReviewController extends BaseController {
 
 	private List<String> getProjectMemberIds(String projectId, DatastoreService datastore) {
 		List<String> ret = new ArrayList<String>();
-		ret.add(getUserId(datastore));
+		Query query = new Query("SelectedProject");
+		query.setFilter(FilterOperator.EQUAL.of("projectId", projectId));
+		List<Entity> selectedProjectEntities = datastore.prepare(query).asList(FetchOptions.Builder.withDefaults());
+		if (selectedProjectEntities != null) {
+			for (Entity entity : selectedProjectEntities) {
+				ret.add((String) entity.getProperty("userId"));
+			}
+		}
 		return ret;
 	}
 }

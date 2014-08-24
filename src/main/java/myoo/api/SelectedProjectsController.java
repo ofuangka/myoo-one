@@ -70,10 +70,12 @@ public class SelectedProjectsController extends BaseController {
 		if (newSelectedProjects != null) {
 			List<Entity> newProjectEntities = new ArrayList<Entity>();
 			for (String projectId : newSelectedProjects) {
-				Entity entity = new Entity("SelectedProject");
-				entity.setProperty("userId", userId);
-				entity.setProperty("projectId", projectId);
-				newProjectEntities.add(entity);
+				if (selectedProjects.get(projectId)) {
+					Entity entity = new Entity("SelectedProject");
+					entity.setProperty("userId", userId);
+					entity.setProperty("projectId", projectId);
+					newProjectEntities.add(entity);
+				}
 			}
 			datastore.put(newProjectEntities);
 		}

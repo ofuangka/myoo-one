@@ -42,7 +42,7 @@
 				<div class="row" data-ng-cloak>
 					<div class="col-md-2 col-sm-4">
 						<ul class="nav nav-pills nav-stacked" data-ng-cloak>
-							<li data-ng-repeat="project in userState.projects"
+							<li data-ng-repeat="project in userState.projects | filter : inSelectedProjects"
 								data-ng-class="{ 'active' : project.id === userState.currentProjectId }">
 								<a
 								href="#/project/{{ project.id }}/section/{{ userState.currentSectionId }}"
