@@ -5,18 +5,51 @@ angular.module('myooApp', ['ngRoute'])
         { id : 'config', name : 'Config', description : 'Use this section to configure a project attributes and achievements.' }
     ])
     .constant('DEFAULT_SECTION_ID', 'record')
+    .constant('REVIEW_SECTIONS', [
+		{
+			name : 'Comparison',
+			id : 'comparison'
+		}, {
+			name : 'Achievements',
+			id : 'achievements'
+		}
+    ])
+    .constant('DATE_REGEX', /\d{4}-\d{2}-\d{2}/)
     .constant('FN_AJAX_FAILURE', function ajaxFailure(jqXhr) {
     	$('#alertBoxTitle').html('Uh oh...');
     	$('#alertBoxBody').html('Something went terribly wrong, and the page won\'t work as expected. Please wait and try again a little later.');
         $('#alertBox').modal('show');
     })
-    .config(function($routeProvider, DEFAULT_SECTION_ID) {
+    .constant('TODAY', new Date())
+    .constant('LAST_WEEK', (function() {
+    	var ret = new Date();
+    	ret.setDate(ret.getDate() - 7);
+    	return ret;
+    })())
+    .constant('LAST_MONTH', (function() {
+    	var ret = new Date();
+    	ret.setMonth(ret.getMonth() - 1);
+    	return ret;
+    })())
+    .factory('cacheBuster', function($q) {
+    	return {
+    		'request' : function(request) {
+    			if (request.method === 'GET') {
+    				var sep = (request.url.indexOf('?') === -1) ? '?' : '&';
+    				request.url = request.url + sep + '_=' + new Date().getTime();
+    			}
+    			return request || $q.when(request);
+    		}
+    	};
+    })
+    .config(function($routeProvider, $httpProvider, DEFAULT_SECTION_ID) {
     	$('#alertBox').modal({
         	show : false
         });
     	$('#preferencesBox').modal({
     		show : false
     	});
+    	$httpProvider.interceptors.push('cacheBuster');
         $routeProvider.when('/project/:projectId/section/:sectionId', {
             templateUrl : function getTemplateUrl(routeParams) {
                 var ret = 'partials/' + DEFAULT_SECTION_ID + '.html';
@@ -41,12 +74,19 @@ angular.module('myooApp', ['ngRoute'])
             redirectTo : '/project'
         });
     })
-    .controller('rootCtrl', function($scope, $route, $http, FN_AJAX_FAILURE, SECTIONS) {
-        $scope.userState = {
+    .controller('rootCtrl', function($scope, $route, $filter, $http, FN_AJAX_FAILURE, SECTIONS, REVIEW_SECTIONS, TODAY, LAST_WEEK) {
+        var dateFilter = $filter('date');
+    	$scope.userState = {
             sections : SECTIONS,
             selectedProjects : {},
             achievementsPromises : {},
-            recordsPromises : {}
+            recordsPromises : {},
+            review : {
+        		from : dateFilter(LAST_WEEK, 'yyyy-MM-dd'),
+        		to : dateFilter(TODAY, 'yyyy-MM-dd'),
+        		selections : REVIEW_SECTIONS,
+        		currentSelection : REVIEW_SECTIONS[0]
+        	}
         };
         $scope.$on('$routeChangeSuccess', function onRouteChangeSuccess() {
             $scope.userState.currentProjectId = $route.current.params.projectId;

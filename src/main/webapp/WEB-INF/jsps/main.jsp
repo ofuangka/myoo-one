@@ -107,15 +107,15 @@
 								<td width="1%"><input type="checkbox"
 									data-ng-model="userState.selectedProjects[project.id]" /></td>
 								<td>{{ project.name }}</td>
-								<td width="1%"><button type="button"
+								<td width="1%"><!-- <button type="button"
 										class="btn btn-default"
 										data-ng-click="confirmClearPoints(project)">Clear
-										points</button>
+										points</button> --></td>
 							</tr>
 						</tbody>
 					</table>
 					<p data-ng-if="userState.projects.length === 0">
-						There are currently no projects to have preferences on.
+						There are currently no projects to subscribe to.
 					</p>
 				</div>
 				<div id="preferencesBoxFooter" class="modal-footer">
