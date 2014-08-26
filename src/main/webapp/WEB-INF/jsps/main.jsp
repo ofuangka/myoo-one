@@ -140,6 +140,7 @@
 	<script src="myoo.js"></script>
 	<script src="filters/dash.js"></script>
 	<script src="directives/save-on-event.js"></script>
+	<script src="directives/resizing-chart.js"></script>
 	<script src="controllers/record.js"></script>
 	<script src="controllers/review.js"></script>
 	<script src="controllers/config.js"></script>

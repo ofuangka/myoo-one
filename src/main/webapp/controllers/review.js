@@ -53,14 +53,7 @@ angular.module('myooApp').controller('reviewCtrl', function($scope, $filter, $ht
 					to : newValue.to
 				}
 			}).then(function(response) {
-				(new google.visualization.ColumnChart(document.getElementById('reviewChart'))).draw(getChartData(response.data), {
-					vAxis : {
-						format : '#,###.##\u03BC',
-						viewWindow : {
-							min : 0
-						}
-					}
-				});
+				$scope.userState.chartData = getChartData(response.data);
 			}, FN_AJAX_FAILURE);
 		} else {
 			// do nothing
