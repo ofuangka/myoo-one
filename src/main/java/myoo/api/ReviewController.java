@@ -5,12 +5,19 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import myoo.dao.RecordDao;
+import myoo.dao.SubscriptionDao;
+import myoo.dao.UserDao;
 import myoo.dto.Comparison;
+import myoo.dto.Subscription;
 import myoo.ext.BaseController;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,25 +26,32 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.EntityNotFoundException;
-import com.google.appengine.api.datastore.FetchOptions;
-import com.google.appengine.api.datastore.KeyFactory;
-import com.google.appengine.api.datastore.Query;
-import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
-import com.google.appengine.api.datastore.Query.Filter;
-import com.google.appengine.api.datastore.Query.FilterOperator;
 
 @Controller
 public class ReviewController extends BaseController {
 
+	@Autowired
+	private SubscriptionDao subscriptionDao;
+
+	@Autowired
+	private RecordDao recordDao;
+
+	@Autowired
+	private UserDao userDao;
+
+	@RequestMapping({ "/projects/{projectId}/review/achievements" })
+	public View achievements(@PathVariable String projectId, @RequestParam("from") String from, @RequestParam("to") String to, ModelMap model) {
+
+		return new MappingJackson2JsonView();
+	}
+
 	@RequestMapping({ "/projects/{projectId}/review/comparison" })
 	public View comparison(@PathVariable String projectId, @RequestParam("from") String from, @RequestParam("to") String to, ModelMap model) {
-		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
-		List<String> projectMemberIds = getProjectMemberIds(projectId, datastore);
+		List<Subscription> subscriptions = subscriptionDao.getByProjectId(projectId);
+
+		Set<String> projectMemberIds = getUserIdsFromSubscriptions(subscriptions);
 
 		// TODO: prevent projects from getting too large
 
@@ -68,12 +82,12 @@ public class ReviewController extends BaseController {
 					List<Integer> points = new ArrayList<Integer>();
 
 					for (Date date : dates) {
-						points.add(getPointsByProjectByUserByDate(projectId, memberId, date, datastore));
+						points.add(recordDao.getPointsByProjectByUserByDate(projectId, memberId, date));
 					}
 
 					String memberNickname = null;
 					try {
-						memberNickname = getNicknameByUserId(memberId, datastore);
+						memberNickname = userDao.getNicknameByUserId(memberId);
 					} catch (EntityNotFoundException e) {
 						// TODO: figure out logging
 					}
@@ -93,33 +107,16 @@ public class ReviewController extends BaseController {
 		return new MappingJackson2JsonView();
 	}
 
-	private String getNicknameByUserId(String userId, DatastoreService datastore) throws EntityNotFoundException {
-		return (String) datastore.get(KeyFactory.createKey("User", Long.valueOf(userId))).getProperty("nickname");
-	}
+	private Set<String> getUserIdsFromSubscriptions(List<Subscription> subscriptions) {
+		Set<String> ret = new HashSet<String>();
 
-	private Integer getPointsByProjectByUserByDate(String projectId, String userId, Date date, DatastoreService datastore) {
-		Query query = new Query("Record");
-		query.setFilter(getFilterByProjectByUserByDate(projectId, userId, date));
-		List<Entity> recordEntities = datastore.prepare(query).asList(FetchOptions.Builder.withDefaults());
-		Integer ret = 0;
-		if (recordEntities != null) {
-			for (Entity recordEntity : recordEntities) {
-				ret += ((Long) recordEntity.getProperty("points")).intValue();
+		if (subscriptions != null) {
+			for (Subscription subscription : subscriptions) {
+				ret.add(subscription.getUserId());
 			}
 		}
-		return ret;
-	}
 
-	private Filter getFilterByProjectByUserByDate(String projectId, String userId, Date date) {
-		Calendar toCal = Calendar.getInstance();
-		toCal.setTime(date);
-		toCal.set(Calendar.HOUR_OF_DAY, 23);
-		toCal.set(Calendar.MINUTE, 59);
-		toCal.set(Calendar.SECOND, 59);
-		toCal.set(Calendar.MILLISECOND, 999);
-		Date to = toCal.getTime();
-		return CompositeFilterOperator.and(FilterOperator.EQUAL.of("projectId", projectId), FilterOperator.EQUAL.of("userId", userId),
-				FilterOperator.LESS_THAN_OR_EQUAL.of("createdTs", to));
+		return ret;
 	}
 
 	private List<Date> parseDates(String fromString, String toString) {
@@ -153,18 +150,5 @@ public class ReviewController extends BaseController {
 
 	private int getDateFromString(String str) {
 		return Integer.valueOf(str.substring(8, 10));
-	}
-
-	private List<String> getProjectMemberIds(String projectId, DatastoreService datastore) {
-		List<String> ret = new ArrayList<String>();
-		Query query = new Query("SelectedProject");
-		query.setFilter(FilterOperator.EQUAL.of("projectId", projectId));
-		List<Entity> selectedProjectEntities = datastore.prepare(query).asList(FetchOptions.Builder.withDefaults());
-		if (selectedProjectEntities != null) {
-			for (Entity entity : selectedProjectEntities) {
-				ret.add((String) entity.getProperty("userId"));
-			}
-		}
-		return ret;
 	}
 }

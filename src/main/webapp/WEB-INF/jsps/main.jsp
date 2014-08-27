@@ -42,7 +42,7 @@
 				<div class="row" data-ng-cloak>
 					<div class="col-md-2 col-sm-4">
 						<ul class="nav nav-pills nav-stacked" data-ng-cloak>
-							<li data-ng-repeat="project in userState.projects | filter : inSelectedProjects"
+							<li data-ng-repeat="project in userState.projects | filter : isSubscribed"
 								data-ng-class="{ 'active' : project.id === userState.currentProjectId }">
 								<a
 								href="#/project/{{ project.id }}/section/{{ userState.currentSectionId }}"
@@ -92,7 +92,7 @@
 				<div id="preferencesBoxBody" class="modal-body">
 					<table data-ng-if="userState.projects.length > 0" class="table table-bordered table-striped table-hover">
 						<thead>
-							<tr><th colspan="3">Subscribed projects</th></tr>
+							<tr><th colspan="3">Subscriptions</th></tr>
 						</thead>
 						<thead>
 							<tr>
@@ -105,7 +105,7 @@
 							<tr
 								data-ng-repeat="project in userState.projects | orderBy : 'name'">
 								<td width="1%"><input type="checkbox"
-									data-ng-model="userState.selectedProjects[project.id]" /></td>
+									data-ng-model="userState.subscriptions[project.id]" /></td>
 								<td>{{ project.name }}</td>
 								<td width="1%"><!-- <button type="button"
 										class="btn btn-default"

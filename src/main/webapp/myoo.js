@@ -78,7 +78,7 @@ angular.module('myooApp', ['ngRoute'])
         var dateFilter = $filter('date');
     	$scope.userState = {
             sections : SECTIONS,
-            selectedProjects : {},
+            subscriptions : {},
             achievementsPromises : {},
             recordsPromises : {},
             review : {
@@ -97,7 +97,7 @@ angular.module('myooApp', ['ngRoute'])
         		name : '...',
         		description : '...'
         	}).then(function onAjaxSuccess(response) {
-        		$scope.userState.selectedProjects[response.data.project.id] = true;
+        		$scope.userState.subscriptions[response.data.project.id] = true;
                 $scope.userState.projects.push(response.data.project);
         	}, FN_AJAX_FAILURE);
         };
@@ -110,13 +110,13 @@ angular.module('myooApp', ['ngRoute'])
         		// TODO: do something
         	}
         };
-        $scope.inSelectedProjects = function(project) {
-        	return $scope.userState.selectedProjects[project.id];
+        $scope.isSubscribed = function(project) {
+        	return $scope.userState.subscriptions[project.id];
         };
-        $http.get('api/selected-projects').then(function onAjaxSuccess(response) {
-        	$scope.userState.selectedProjects = response.data.selectedProjects;
-        	$scope.$watch('userState.selectedProjects', function saveSelectedProjects(newValue, oldValue) {
-        		$http.post('api/selected-projects', newValue).then(function onAjaxSuccess(response) {
+        $http.get('api/subscriptions').then(function onAjaxSuccess(response) {
+        	$scope.userState.subscriptions = response.data.subscriptions;
+        	$scope.$watch('userState.subscriptions', function saveSubscriptions(newValue, oldValue) {
+        		$http.post('api/subscriptions', newValue).then(function onAjaxSuccess(response) {
         			
                     $http.get('api/projects').then(function onAjaxSuccess(response) {
                         $scope.userState.projects = response.data.projects;            

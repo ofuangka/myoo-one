@@ -5,10 +5,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import myoo.dao.UserDao;
 import myoo.dto.Achievement;
 import myoo.dto.Project;
 import myoo.ext.BaseController;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,7 +31,11 @@ import com.google.appengine.api.users.User;
 
 @Controller
 @RequestMapping({ "/projects" })
-public class ProjectsController extends BaseController {
+public class ProjectController extends BaseController {
+
+	@Autowired
+	private UserDao userDao;
+
 	@RequestMapping(value = { "", "/" }, method = { org.springframework.web.bind.annotation.RequestMethod.GET })
 	public View projects(ModelMap model) {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -72,12 +78,12 @@ public class ProjectsController extends BaseController {
 		projectEntity.setProperty("lastUpdatedTs", now);
 
 		Key key = datastore.put(projectEntity);
-		
-		Entity selectedProjectEntity = new Entity("SelectedProject");
-		selectedProjectEntity.setProperty("projectId", String.valueOf(key.getId()));
-		selectedProjectEntity.setProperty("userId", getUserId(datastore));
-		datastore.put(selectedProjectEntity);
-		
+
+		Entity subscriptionEntity = new Entity("Subscription");
+		subscriptionEntity.setProperty("projectId", String.valueOf(key.getId()));
+		subscriptionEntity.setProperty("userId", userDao.getUserId(getCurrentUser()));
+		datastore.put(subscriptionEntity);
+
 		project.setId(String.valueOf(key.getId()));
 		project.setCreatedBy(currentUser.getNickname());
 		project.setLastUpdatedBy(currentUser.getNickname());
@@ -116,13 +122,13 @@ public class ProjectsController extends BaseController {
 	public View deleteProject(@PathVariable String projectId, ModelMap model) {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
-		List<Entity> selectedProjectEntities = getSelectedProjectEntitiesByProjectId(projectId, datastore);
-		if (selectedProjectEntities != null) {
-			List<Key> selectedProjectKeys = new ArrayList<Key>();
-			for (Entity entity : selectedProjectEntities) {
-				selectedProjectKeys.add(entity.getKey());
+		List<Entity> subscriptionEntities = getSubscriptionEntitiesByProjectId(projectId, datastore);
+		if (subscriptionEntities != null) {
+			List<Key> subscriptionKeys = new ArrayList<Key>();
+			for (Entity entity : subscriptionEntities) {
+				subscriptionKeys.add(entity.getKey());
 			}
-			datastore.delete(selectedProjectKeys);
+			datastore.delete(subscriptionKeys);
 		}
 
 		List<Entity> achievementEntities = getAchievementsByProjectId(projectId, datastore);
@@ -138,9 +144,9 @@ public class ProjectsController extends BaseController {
 		return new MappingJackson2JsonView();
 	}
 
-	private List<Entity> getSelectedProjectEntitiesByProjectId(String projectId, DatastoreService datastore) {
-		String userId = getUserId(datastore);
-		Query query = new Query("SelectedProject");
+	private List<Entity> getSubscriptionEntitiesByProjectId(String projectId, DatastoreService datastore) {
+		String userId = userDao.getUserId(getCurrentUser());
+		Query query = new Query("Subscription");
 		query.setFilter(FilterOperator.EQUAL.of("userId", userId));
 		return datastore.prepare(query).asList(FetchOptions.Builder.withDefaults());
 	}
