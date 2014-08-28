@@ -1,4 +1,4 @@
-package myoo.dao;
+package myoo.ext;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;

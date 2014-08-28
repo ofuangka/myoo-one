@@ -2,6 +2,8 @@ package myoo.dao;
 
 import java.util.List;
 
+import myoo.ext.BaseDao;
+
 import org.springframework.stereotype.Repository;
 
 import com.google.appengine.api.datastore.Entity;

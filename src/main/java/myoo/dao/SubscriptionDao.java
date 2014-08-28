@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import myoo.dto.Subscription;
+import myoo.ext.BaseDao;
 
 import org.springframework.stereotype.Repository;
 
@@ -44,6 +45,19 @@ public class SubscriptionDao extends BaseDao {
 		}
 
 		return ret;
+	}
+
+	public void deleteByProjectId(String projectId) {
+		Query query = new Query("Subscription");
+		query.setFilter(FilterOperator.EQUAL.of("projectId", projectId));
+		List<Entity> oldProjectEntities = getDatastore().prepare(query).asList(FetchOptions.Builder.withDefaults());
+		if (oldProjectEntities != null) {
+			List<Key> subscriptionEntityKeys = new ArrayList<Key>();
+			for (Entity entity : oldProjectEntities) {
+				subscriptionEntityKeys.add(entity.getKey());
+			}
+			getDatastore().delete(subscriptionEntityKeys);
+		}
 	}
 
 	public void deleteByUserId(String userId) {

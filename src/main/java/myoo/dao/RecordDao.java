@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import myoo.dto.Record;
+import myoo.ext.BaseDao;
 
 import org.springframework.stereotype.Repository;
 
