@@ -29,9 +29,14 @@ public class UserDao extends BaseDao {
 			userEntity.setProperty("nickname", currentUser.getNickname());
 			userKey = getDatastore().put(userEntity);
 		} else {
-			if (userEntities.size() > 1) {
-			}
 			userKey = ((Entity) userEntities.get(0)).getKey();
+
+			// delete any entries beyond the first one
+			if (userEntities.size() > 1) {
+				for (int i = 1; i < userEntities.size(); i++) {
+					getDatastore().delete(userEntities.get(i).getKey());
+				}
+			}
 		}
 		return String.valueOf(userKey.getId());
 	}

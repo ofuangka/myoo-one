@@ -15,7 +15,6 @@ public class PageController extends BaseController {
 	public String get(ModelMap model) {
 		UserService userService = UserServiceFactory.getUserService();
 		model.addAttribute("logoutUrl", userService.createLogoutURL(URL_AFTER_LOGOUT));
-
 		model.addAttribute("currentUser", getCurrentUser());
 		return "main";
 	}

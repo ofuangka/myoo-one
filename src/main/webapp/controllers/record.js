@@ -5,6 +5,7 @@ angular.module('myooApp').controller(
 				$http.post('api/projects/' + $scope.userState.currentProjectId + '/achievements/' + achievement.id + '/records', {}).then(
 						function onAjaxSuccess(response) {
 							console.log("Successfully inserted achievement record");
+							$scope.userState.records.push(response.data.record);
 							$scope.userState.totalPoints += response.data.record.points;
 							achievement.completed = true;
 						}, FN_AJAX_FAILURE);
