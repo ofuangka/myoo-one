@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.FetchOptions;
+import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
 import com.google.appengine.api.datastore.Query.Filter;
@@ -117,5 +118,23 @@ public class RecordDao extends BaseDao {
 		ret.setPoints(points);
 
 		return ret;
+	}
+
+	private Filter getFilterByProjectIdByUserId(String projectId, String userId) {
+		return CompositeFilterOperator.and(FilterOperator.EQUAL.of("projectId", projectId), FilterOperator.EQUAL.of("userId", userId));
+	}
+
+	public void deleteByProjectIdByUserId(String projectId, String userId) {
+		Query query = new Query("Record");
+		query.setFilter(getFilterByProjectIdByUserId(projectId, userId));
+		List<Entity> recordEntities = getDatastore().prepare(query).asList(FetchOptions.Builder.withDefaults());
+		if (recordEntities != null) {
+			List<Key> recordKeys = new ArrayList<Key>();
+			for (Entity entity : recordEntities) {
+				recordKeys.add(entity.getKey());
+			}
+			getDatastore().delete(recordKeys);
+		}
+
 	}
 }

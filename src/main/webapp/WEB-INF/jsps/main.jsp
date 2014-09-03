@@ -2,8 +2,7 @@
 <html lang="en" data-ng-app="myooApp">
 <head>
 <title>/myoo/</title>
-<link rel="stylesheet"
-	href="libs/bootstrap/3.2.0/css/bootstrap.min.css" />
+<link rel="stylesheet" href="libs/bootstrap/3.2.0/css/bootstrap.min.css" />
 <link rel="stylesheet" href="css/myoo.css" />
 
 <meta name="viewport"
@@ -42,7 +41,8 @@
 				<div class="row" data-ng-cloak>
 					<div class="col-md-2 col-sm-4">
 						<ul class="nav nav-pills nav-stacked" data-ng-cloak>
-							<li data-ng-repeat="project in userState.projects | filter : isSubscribed"
+							<li
+								data-ng-repeat="project in userState.projects | filter : isSubscribed"
 								data-ng-class="{ 'active' : project.id === userState.currentProjectId }">
 								<a
 								href="#/project/{{ project.id }}/section/{{ userState.currentSectionId }}"
@@ -64,6 +64,53 @@
 			</div>
 		</div>
 	</div>
+	<div id="preferencesBox" class="modal fade" tabindex="-1" role="dialog"
+		aria-labelledby="Preferences" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">
+						<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+					</button>
+					<h4 id="preferencesBoxTitle" class="modal-title">Preferences</h4>
+				</div>
+				<div id="preferencesBoxBody" class="modal-body">
+					<table data-ng-if="userState.projects.length > 0"
+						class="table table-bordered table-striped table-hover">
+						<thead>
+							<tr>
+								<th colspan="3">Subscriptions</th>
+							</tr>
+						</thead>
+						<thead>
+							<tr>
+								<th></th>
+								<th>Project name</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr
+								data-ng-repeat="project in userState.projects | orderBy : 'name'">
+								<td width="1%"><input type="checkbox"
+									data-ng-model="userState.subscriptions[project.id]" /></td>
+								<td>{{ project.name }}</td>
+								<td width="1%"><button type="button"
+										class="btn btn-default"
+										data-ng-click="confirmClearPoints(project)">Clear
+										points</button></td>
+							</tr>
+						</tbody>
+					</table>
+					<p data-ng-if="userState.projects.length === 0">There are
+						currently no projects to subscribe to.</p>
+				</div>
+				<div id="preferencesBoxFooter" class="modal-footer">
+					<button type="button" class="btn btn-primary" data-dismiss="modal">Done</button>
+				</div>
+			</div>
+		</div>
+	</div>
 	<div id="alertBox" class="modal fade" tabindex="-1" role="dialog"
 		aria-labelledby="Alert" aria-hidden="true">
 		<div class="modal-dialog modal-sm">
@@ -79,58 +126,10 @@
 			</div>
 		</div>
 	</div>
-	<div id="preferencesBox" class="modal fade" tabindex="-1" role="dialog"
-		aria-labelledby="Preferences" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal">
-						<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-					</button>
-					<h4 id="preferencesBoxTitle" class="modal-title">Preferences</h4>
-				</div>
-				<div id="preferencesBoxBody" class="modal-body">
-					<table data-ng-if="userState.projects.length > 0" class="table table-bordered table-striped table-hover">
-						<thead>
-							<tr><th colspan="3">Subscriptions</th></tr>
-						</thead>
-						<thead>
-							<tr>
-								<th></th>
-								<th>Project name</th>
-								<th></th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr
-								data-ng-repeat="project in userState.projects | orderBy : 'name'">
-								<td width="1%"><input type="checkbox"
-									data-ng-model="userState.subscriptions[project.id]" /></td>
-								<td>{{ project.name }}</td>
-								<td width="1%"><!-- <button type="button"
-										class="btn btn-default"
-										data-ng-click="confirmClearPoints(project)">Clear
-										points</button> --></td>
-							</tr>
-						</tbody>
-					</table>
-					<p data-ng-if="userState.projects.length === 0">
-						There are currently no projects to subscribe to.
-					</p>
-				</div>
-				<div id="preferencesBoxFooter" class="modal-footer">
-					<button type="button" class="btn btn-primary" data-dismiss="modal">Done</button>
-				</div>
-			</div>
-		</div>
-	</div>
 	<script src="libs/jquery/2.1.1/jquery-2.1.1.min.js"></script>
-	<script
-		src="libs/angularjs/1.3.0-rc.0/angular.min.js"></script>
-	<script
-		src="libs/angularjs/1.3.0-rc.0/angular-route.min.js"></script>
-	<script
-		src="libs/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+	<script src="libs/angularjs/1.3.0-rc.0/angular.min.js"></script>
+	<script src="libs/angularjs/1.3.0-rc.0/angular-route.min.js"></script>
+	<script src="libs/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 	<script src="https://www.google.com/jsapi"></script>
 	<script>
 		google.load('visualization', '1.0', {

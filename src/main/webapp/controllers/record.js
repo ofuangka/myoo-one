@@ -10,14 +10,18 @@ angular.module('myooApp').controller(
 							achievement.completed = true;
 						}, FN_AJAX_FAILURE);
 			};
+			$scope.clearAchievementCompletedState = function() {
+
+				angular.forEach($scope.userState.achievements, function(achievement, i) {
+					achievement.completed = false;
+				});
+			};
 			$q.all([ $scope.getAchievementsPromise($scope.userState.currentProjectId), $scope.getRecordsPromise($scope.userState.currentProjectId) ]).then(
 					function onAjaxSuccess(responses) {
 						$scope.userState.achievements = responses[0].data.achievements;
 						$scope.userState.records = responses[1].data.records;
-
-						angular.forEach($scope.userState.achievements, function(achievement, i) {
-							achievement.completed = false;
-						});
+						
+						$scope.clearAchievementCompletedState();
 
 						angular.forEach($scope.userState.records, function(record, i) {
 							for (var j = 0, len = $scope.userState.achievements.length; j < len; j++) {
@@ -29,4 +33,7 @@ angular.module('myooApp').controller(
 							}
 						});
 					}, FN_AJAX_FAILURE);
+			$scope.$on('clearPointsSuccess', function onClearPointsSuccess() {
+				$scope.clearAchievementCompletedState();
+			});
 		});

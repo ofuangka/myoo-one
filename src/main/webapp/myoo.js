@@ -85,7 +85,8 @@ angular.module('myooApp', ['ngRoute'])
         		from : dateFilter(LAST_WEEK, 'yyyy-MM-dd'),
         		to : dateFilter(TODAY, 'yyyy-MM-dd'),
         		selections : REVIEW_SECTIONS,
-        		currentSelection : REVIEW_SECTIONS[0]
+        		currentSelection : REVIEW_SECTIONS[0],
+        		refresh : false
         	}
         };
         $scope.$on('$routeChangeSuccess', function onRouteChangeSuccess() {
@@ -107,7 +108,11 @@ angular.module('myooApp', ['ngRoute'])
         $scope.confirmClearPoints = function(project) {
         	var choice = confirm('Are you sure you want to clear your points on this project? This operation cannot be undone.');
         	if (choice) {
-        		// TODO: do something
+        		$http.delete('api/projects/' + project.id + '/achievements/all/records').then(function onAjaxSuccess() {
+        			delete $scope.userState.recordsPromises[project.id];
+        			$scope.populateTotalPoints();
+        			$scope.$broadcast('clearPointsSuccess');
+        		}, FN_AJAX_FAILURE);
         	}
         };
         $scope.isSubscribed = function(project) {
@@ -124,14 +129,16 @@ angular.module('myooApp', ['ngRoute'])
         		}, FN_AJAX_FAILURE);
         	}, true);
         }, FN_AJAX_FAILURE);
-        $http.get('api/projects/all/achievements/all/records').then(function onAjaxSuccess(response) {
-        	var records = response.data.records;
-        	var totalPoints = 0;
-        	angular.forEach(records, function doForEachRecord(record, i) {
-        		totalPoints += record.points;
-        	});
-        	$scope.userState.totalPoints = totalPoints;
-        }, FN_AJAX_FAILURE);
+        $scope.populateTotalPoints = function() {
+            $http.get('api/projects/all/achievements/all/records').then(function onAjaxSuccess(response) {
+            	var records = response.data.records;
+            	var totalPoints = 0;
+            	angular.forEach(records, function doForEachRecord(record, i) {
+            		totalPoints += record.points;
+            	});
+            	$scope.userState.totalPoints = totalPoints;
+            }, FN_AJAX_FAILURE);
+        };
         $scope.getAchievementsPromise = function(projectId) {
             if (angular.isUndefined($scope.userState.achievementsPromises[projectId])) {
                 $scope.userState.achievementsPromises[projectId] = $http.get('api/projects/' + projectId + '/achievements');
@@ -155,4 +162,5 @@ angular.module('myooApp', ['ngRoute'])
             }
             return ret;
         };
+        $scope.populateTotalPoints();
     });

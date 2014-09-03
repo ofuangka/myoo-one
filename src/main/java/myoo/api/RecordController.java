@@ -15,6 +15,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
@@ -34,8 +35,14 @@ public class RecordController extends BaseController {
 	@Autowired
 	private UserDao userDao;
 
-	@RequestMapping(value = { "/projects/{projectId}/achievements/{achievementId}/records" }, method = { org.springframework.web.bind.annotation.RequestMethod.GET })
-	public View recordsByAchievementId(@PathVariable String projectId, @PathVariable String achievementId, @RequestParam(required = false) String from,
+	@RequestMapping(value = { "/projects/{projectId}/achievements/all/records" }, method = RequestMethod.DELETE)
+	public View deleteByProjectId(@PathVariable String projectId) {
+		recordDao.deleteByProjectIdByUserId(projectId, userDao.getUserId(getCurrentUser()));
+		return new MappingJackson2JsonView();
+	}
+
+	@RequestMapping(value = { "/projects/{projectId}/achievements/{achievementId}/records" }, method = { RequestMethod.GET })
+	public View getByProjectIdByAchievementId(@PathVariable String projectId, @PathVariable String achievementId, @RequestParam(required = false) String from,
 			@RequestParam(required = false) String to, ModelMap model) {
 
 		String userId = userDao.getUserId(getCurrentUser());
@@ -67,8 +74,8 @@ public class RecordController extends BaseController {
 		return new MappingJackson2JsonView();
 	}
 
-	@RequestMapping(value = { "/projects/{projectId}/achievements/{achievementId}/records" }, method = { org.springframework.web.bind.annotation.RequestMethod.POST })
-	public View insertRecord(@PathVariable String projectId, @PathVariable String achievementId, @RequestBody Record record, ModelMap model)
+	@RequestMapping(value = { "/projects/{projectId}/achievements/{achievementId}/records" }, method = { RequestMethod.POST })
+	public View insert(@PathVariable String projectId, @PathVariable String achievementId, @RequestBody Record record, ModelMap model)
 			throws NumberFormatException, EntityNotFoundException {
 
 		String userId = userDao.getUserId(getCurrentUser());

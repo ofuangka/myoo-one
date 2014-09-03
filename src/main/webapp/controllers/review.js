@@ -75,4 +75,7 @@ angular.module('myooApp').controller('reviewCtrl', function($scope, $filter, $ht
 			// do nothing
 		}
 	}, true);
+	$scope.$on('clearPointsSuccess', function onClearPointsSuccess() {
+		$scope.userState.review.refresh = !$scope.userState.review.refresh;
+	});
 });
