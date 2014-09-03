@@ -67,9 +67,9 @@ public class RecordDao extends BaseDao {
 		return getAsRecords(getDatastore().prepare(query).asList(FetchOptions.Builder.withDefaults()));
 	}
 
-	public List<Record> getByProjectIdByUserId(String projectId, String userId) {
+	public List<Record> getByProjectIdByUserIdByDate(String projectId, String userId, Date from, Date to) {
 		Query query = new Query("Record");
-		query.setFilter(getFilterByProjectIdByUserId(projectId, userId));
+		query.setFilter(getFilterByProjectIdByUserId(projectId, userId, from, to));
 		return getAsRecords(getDatastore().prepare(query).asList(FetchOptions.Builder.withDefaults()));
 	}
 
@@ -83,11 +83,15 @@ public class RecordDao extends BaseDao {
 		return FilterOperator.EQUAL.of("userId", userId);
 	}
 
-	private Filter getFilterByProjectIdByUserId(String projectId, String userId) {
-		Calendar todayCal = Calendar.getInstance();
-		todayCal.set(todayCal.get(Calendar.YEAR), todayCal.get(Calendar.MONTH), todayCal.get(Calendar.DATE), 0, 0, 0);
+	private Filter getFilterByProjectIdByUserId(String projectId, String userId, Date from, Date to) {
+		Calendar toCal = Calendar.getInstance();
+		toCal.setTime(to);
+		toCal.set(Calendar.HOUR_OF_DAY, 23);
+		toCal.set(Calendar.MINUTE, 59);
+		toCal.set(Calendar.SECOND, 59);
+		toCal.set(Calendar.MILLISECOND, 999);
 		return CompositeFilterOperator.and(FilterOperator.EQUAL.of("projectId", projectId), FilterOperator.EQUAL.of("userId", userId),
-				FilterOperator.GREATER_THAN_OR_EQUAL.of("createdTs", todayCal.getTime()));
+				FilterOperator.GREATER_THAN_OR_EQUAL.of("createdTs", from), FilterOperator.LESS_THAN_OR_EQUAL.of("createdTs", toCal.getTime()));
 	}
 
 	private Filter getFilterByAchievementIdByUserId(String achievementId, String userId) {

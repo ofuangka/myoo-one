@@ -3,7 +3,7 @@
 <head>
 <title>/myoo/</title>
 <link rel="stylesheet"
-	href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
+	href="libs/bootstrap/3.2.0/css/bootstrap.min.css" />
 <link rel="stylesheet" href="css/myoo.css" />
 
 <meta name="viewport"
@@ -124,13 +124,13 @@
 			</div>
 		</div>
 	</div>
-	<script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+	<script src="libs/jquery/2.1.1/jquery-2.1.1.min.js"></script>
 	<script
-		src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-beta.16/angular.min.js"></script>
+		src="libs/angularjs/1.3.0-rc.0/angular.min.js"></script>
 	<script
-		src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-beta.16/angular-route.min.js"></script>
+		src="libs/angularjs/1.3.0-rc.0/angular-route.min.js"></script>
 	<script
-		src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+		src="libs/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 	<script src="https://www.google.com/jsapi"></script>
 	<script>
 		google.load('visualization', '1.0', {

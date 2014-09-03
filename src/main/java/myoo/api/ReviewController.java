@@ -10,10 +10,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import myoo.dao.AchievementDao;
 import myoo.dao.RecordDao;
 import myoo.dao.SubscriptionDao;
 import myoo.dao.UserDao;
+import myoo.dto.Achievement;
 import myoo.dto.Comparison;
+import myoo.dto.Record;
 import myoo.dto.Subscription;
 import myoo.ext.BaseController;
 
@@ -27,6 +30,7 @@ import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.google.appengine.api.users.User;
 
 @Controller
 public class ReviewController extends BaseController {
@@ -40,9 +44,44 @@ public class ReviewController extends BaseController {
 	@Autowired
 	private UserDao userDao;
 
-	@RequestMapping({ "/projects/{projectId}/review/achievements" })
-	public View achievements(@PathVariable String projectId, @RequestParam("from") String from, @RequestParam("to") String to, ModelMap model) {
+	@Autowired
+	private AchievementDao achievementDao;
 
+	@RequestMapping({ "/projects/{projectId}/review/achievements" })
+	public View achievements(@PathVariable String projectId, @RequestParam("from") String from, @RequestParam("to") String to, ModelMap model)
+			throws NumberFormatException, EntityNotFoundException {
+		User currentUser = getCurrentUser();
+
+		List<Date> dates = parseDates(from, to);
+
+		if (dates.size() > 1) {
+			List<Record> records = recordDao.getByProjectIdByUserIdByDate(projectId, userDao.getUserId(currentUser), dates.get(0), dates.get(dates.size() - 1));
+			if (records != null) {
+
+				// create a map of achievementIds to points within the time
+				// frame provided
+				Map<String, Integer> achievementIdToPointMap = new HashMap<String, Integer>();
+				for (Record record : records) {
+					String achievementId = record.getAchievementId();
+					Integer currentValue = achievementIdToPointMap.get(achievementId);
+					if (currentValue != null) {
+						achievementIdToPointMap.put(achievementId, currentValue + record.getPoints());
+					} else {
+						achievementIdToPointMap.put(achievementId, record.getPoints());
+					}
+				}
+
+				// translate from achievementId to achievementName
+				Map<String, Integer> ret = new HashMap<String, Integer>();
+				Set<String> keys = achievementIdToPointMap.keySet();
+				for (String key : keys) {
+					Achievement achievement = achievementDao.get(key);
+					ret.put(achievement.getName(), achievementIdToPointMap.get(key));
+				}
+				model.addAttribute("achievements", ret);
+			}
+
+		}
 		return new MappingJackson2JsonView();
 	}
 

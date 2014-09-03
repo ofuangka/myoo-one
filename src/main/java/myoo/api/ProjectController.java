@@ -48,7 +48,7 @@ public class ProjectController extends BaseController {
 		Project projectOut = projectDao.put(projectIn.getName(), projectIn.getDescription(), currentUser.getNickname());
 
 		// have the user automatically subscribe to the project
-		subscriptionDao.put(currentUser.getUserId(), projectOut.getId());
+		subscriptionDao.put(userDao.getUserId(currentUser), projectOut.getId());
 
 		// add the resulting project to the model
 		model.addAttribute("project", projectOut);

@@ -17,6 +17,15 @@ angular.module('myooApp').controller('reviewCtrl', function($scope, $filter, $ht
 		}
 		return google.visualization.arrayToDataTable(arr);
 	};
+	var getAchievementsData = function(achievements) {
+		var arr = [],
+			header = ['Achievement', 'Points'];
+		arr.push(header);
+		for (var achievement in achievements) {
+			arr.push([achievement, achievements[achievement]]);
+		}
+		return google.visualization.arrayToDataTable(arr);
+	};
 	var getChartData = function(data) {
 		var ret = null;
 		for (var chart in data) {
@@ -25,7 +34,14 @@ angular.module('myooApp').controller('reviewCtrl', function($scope, $filter, $ht
 				ret = getComparisonData(data.comparison);
 				break;
 			}
-			default : {}
+			case 'achievements' : {
+				ret = getAchievementsData(data.achievements);
+				break;
+			}
+			default : {
+				ret = [];
+				break;
+			}
 			}
 		}
 		return ret;
