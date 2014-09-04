@@ -13,11 +13,34 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.users.User;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 
+/**
+ * This class abstracts data access to Google and myoo User objects as a single
+ * User model
+ * 
+ * @author ofuangka
+ *
+ */
 @Repository
 public class UserDao extends BaseDao {
 
-	public String getUserId(User currentUser) {
+	private UserService getUserService() {
+		return UserServiceFactory.getUserService();
+	}
+
+	private User getCurrentUser() {
+		return getUserService().getCurrentUser();
+	}
+
+	public String getCurrentUserNickname() {
+		return getCurrentUser().getNickname();
+	}
+
+	public String getUserId() {
+
+		User currentUser = getCurrentUser();
 
 		Key userKey = null;
 		Query query = new Query("User");
@@ -43,5 +66,9 @@ public class UserDao extends BaseDao {
 
 	public String getNicknameByUserId(String userId) throws EntityNotFoundException {
 		return (String) getDatastore().get(KeyFactory.createKey("User", Long.valueOf(userId))).getProperty("nickname");
+	}
+
+	public boolean isUserAdmin() {
+		return getUserService().isUserAdmin();
 	}
 }

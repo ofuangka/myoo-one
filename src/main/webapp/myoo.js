@@ -31,7 +31,7 @@ angular.module('myooApp', ['ngRoute'])
     	ret.setMonth(ret.getMonth() - 1);
     	return ret;
     })())
-    .factory('cacheBuster', function($q) {
+    .factory('cacheBuster', ['$q', function($q) {
     	return {
     		'request' : function(request) {
     			if (request.method === 'GET') {
@@ -41,8 +41,8 @@ angular.module('myooApp', ['ngRoute'])
     			return request || $q.when(request);
     		}
     	};
-    })
-    .config(function($routeProvider, $httpProvider, DEFAULT_SECTION_ID) {
+    }])
+    .config(['$routeProvider', '$httpProvider', 'DEFAULT_SECTION_ID', function($routeProvider, $httpProvider, DEFAULT_SECTION_ID) {
     	$('#alertBox').modal({
         	show : false
         });
@@ -73,8 +73,8 @@ angular.module('myooApp', ['ngRoute'])
         $routeProvider.otherwise({
             redirectTo : '/project'
         });
-    })
-    .controller('rootCtrl', function($scope, $route, $filter, $http, FN_AJAX_FAILURE, SECTIONS, REVIEW_SECTIONS, TODAY, LAST_WEEK) {
+    }])
+    .controller('rootCtrl', ['$scope', '$route', '$filter', '$location', '$http', 'FN_AJAX_FAILURE', 'SECTIONS', 'REVIEW_SECTIONS', 'TODAY', 'LAST_WEEK', function($scope, $route, $filter, $location, $http, FN_AJAX_FAILURE, SECTIONS, REVIEW_SECTIONS, TODAY, LAST_WEEK) {
         var dateFilter = $filter('date');
     	$scope.userState = {
             sections : SECTIONS,
@@ -100,6 +100,7 @@ angular.module('myooApp', ['ngRoute'])
         	}).then(function onAjaxSuccess(response) {
         		$scope.userState.subscriptions[response.data.project.id] = true;
                 $scope.userState.projects.push(response.data.project);
+                $location.path('/project/' + response.data.project.id + '/section/config');
         	}, FN_AJAX_FAILURE);
         };
         $scope.showPreferences = function() {
@@ -112,6 +113,10 @@ angular.module('myooApp', ['ngRoute'])
         			delete $scope.userState.recordsPromises[project.id];
         			$scope.populateTotalPoints();
         			$scope.$broadcast('clearPointsSuccess');
+        	    	$('#alertBoxTitle').html('Success');
+        	    	$('#alertBoxBody').html('Project points cleared successfully.');
+        	        $('#alertBox').modal('show');
+        			
         		}, FN_AJAX_FAILURE);
         	}
         };
@@ -163,4 +168,4 @@ angular.module('myooApp', ['ngRoute'])
             return ret;
         };
         $scope.populateTotalPoints();
-    });
+    }]);

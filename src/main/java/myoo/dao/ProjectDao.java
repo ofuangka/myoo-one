@@ -17,6 +17,12 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Query;
 
+/**
+ * This dao manages data access to the Project model
+ * 
+ * @author ofuangka
+ *
+ */
 @Repository
 public class ProjectDao extends BaseDao {
 

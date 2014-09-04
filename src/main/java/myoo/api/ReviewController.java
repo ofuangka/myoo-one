@@ -30,8 +30,13 @@ import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import com.google.appengine.api.datastore.EntityNotFoundException;
-import com.google.appengine.api.users.User;
 
+/**
+ * This controller handles Review requests
+ * 
+ * @author ofuangka
+ *
+ */
 @Controller
 public class ReviewController extends BaseController {
 
@@ -50,12 +55,11 @@ public class ReviewController extends BaseController {
 	@RequestMapping({ "/projects/{projectId}/review/achievements" })
 	public View achievements(@PathVariable String projectId, @RequestParam("from") String from, @RequestParam("to") String to, ModelMap model)
 			throws NumberFormatException, EntityNotFoundException {
-		User currentUser = getCurrentUser();
 
 		List<Date> dates = parseDates(from, to);
 
 		if (dates.size() > 1) {
-			List<Record> records = recordDao.getByProjectIdByUserIdByDate(projectId, userDao.getUserId(currentUser), dates.get(0), dates.get(dates.size() - 1));
+			List<Record> records = recordDao.getByProjectIdByUserIdByDate(projectId, userDao.getUserId(), dates.get(0), dates.get(dates.size() - 1));
 			if (records != null) {
 
 				// create a map of achievementIds to points within the time

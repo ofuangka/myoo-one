@@ -13,29 +13,21 @@
 				</tr>
 				<tr class="form-group">
 					<td><label for="projectName">Project name</label> <input
-						id="projectName"
+						id="projectName" class="form-control" maxlength="100"
 						data-ng-model="(getProjectById(userState.currentProjectId)).name"
-						class="form-control" data-save-on-event="blur"
-						data-save-url="'api/projects'"
+						data-save-on-event="blur" data-save-url="'api/projects'"
 						data-save-post-data="(getProjectById(userState.currentProjectId))" /></td>
 				</tr>
 				<tr class="form-group">
 					<td><label for="projectDescription">Project
-							description</label> <input id="projectDescription"
+							description</label> <input id="projectDescription" class="form-control"
+						maxlength="255"
 						data-ng-model="(getProjectById(userState.currentProjectId)).description"
-						class="form-control" data-save-on-event="blur"
-						data-save-url="'api/projects'"
+						data-save-on-event="blur" data-save-url="'api/projects'"
 						data-save-post-data="(getProjectById(userState.currentProjectId))" /></td>
 				</tr>
-				<!-- 
-                <tr class="form-group">
-                	<td>
-                		<label for="projectMembers">Project members</label>
-                		<input id="projectMembers" data-ng-model="(getProjectById(userState.currentProjectId)).members" class="form-control" />
-                	</td>
-                </tr>
-                -->
-				<tr>
+				<tr
+					data-ng-if="isUserAdmin || (getProjectById(userState.currentProjectId)).createdBy === currentUserNickname">
 					<td class="text-center"><a
 						data-ng-click="confirmDeleteProject((getProjectById(userState.currentProjectId)))">Delete
 							project</a></td>
@@ -46,26 +38,26 @@
 			<thead>
 				<tr>
 					<th>Name</th>
-					<th width="65%">Description</th>
-					<th width="10%">Points</th>
+					<th width="55%">Description</th>
+					<th width="15%">Points</th>
 					<th width="1%"></th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr data-ng-repeat="achievement in userState.achievements">
-					<td><input data-ng-model="achievement.name"
-						class="form-control" placeholder="Name" data-save-on-event="blur"
-						data-save-url="'api/projects/' + userState.currentProjectId + '/achievements'"
-						data-save-post-data="achievement" /></td>
-					<td><input data-ng-model="achievement.description"
-						class="form-control" placeholder="Description"
+					<td><input class="form-control" maxlength="100"
+						placeholder="Name" data-ng-model="achievement.name"
 						data-save-on-event="blur"
 						data-save-url="'api/projects/' + userState.currentProjectId + '/achievements'"
 						data-save-post-data="achievement" /></td>
-					<td><input data-ng-model="
-						achievement.points"
-						type="number" class="form-control" placeholder="Points"
+					<td><input class="form-control" placeholder="Description"
+						maxlength="255" data-ng-model="achievement.description"
 						data-save-on-event="blur"
+						data-save-url="'api/projects/' + userState.currentProjectId + '/achievements'"
+						data-save-post-data="achievement" /></td>
+					<td><input type="number" class="form-control"
+						placeholder="Points" maxlength="3"
+						data-ng-model="achievement.points" data-save-on-event="blur"
 						data-save-url="'api/projects/' + userState.currentProjectId + '/achievements'"
 						data-save-post-data="achievement" /></td>
 					<td class="text-center"><a

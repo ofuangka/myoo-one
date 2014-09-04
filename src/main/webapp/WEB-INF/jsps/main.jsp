@@ -16,7 +16,7 @@
 		<div class="panel panel-info">
 			<div class="panel-heading">
 				<div class="pull-right" data-ng-cloak>
-					Welcome, <a data-ng-click="showPreferences()">${currentUser.nickname}!</a>
+					Welcome, <a data-ng-click="showPreferences()">${currentUserNickname}!</a>
 					<span class="badge"
 						title="You have {{ userState.totalPoints }}&mu;." data-ng-cloak>{{
 						userState.totalPoints }}&mu;</span> <a href="${logoutUrl}">Sign out</a>
@@ -26,7 +26,7 @@
 			<div class="panel-body">
 				<div class="row">
 					<div
-						class="col-md-offset-2 col-sm-offset-4 col-md-10 col-sm-8 padding-md">
+						class="col-md-offset-3 col-sm-offset-4 col-md-9 col-sm-8 padding-md">
 						<ul class="nav nav-pills">
 							<li data-ng-repeat="section in userState.sections"
 								data-ng-class="{ 'active' : section.id === userState.currentSectionId }">
@@ -39,7 +39,7 @@
 					</div>
 				</div>
 				<div class="row" data-ng-cloak>
-					<div class="col-md-2 col-sm-4">
+					<div class="col-md-3 col-sm-4">
 						<ul class="nav nav-pills nav-stacked" data-ng-cloak>
 							<li
 								data-ng-repeat="project in userState.projects | filter : isSubscribed"
@@ -54,7 +54,7 @@
 								Create project</button>
 						</div>
 					</div>
-					<div class="col-md-10 col-sm-8 padding-md">
+					<div class="col-md-9 col-sm-8 padding-md">
 						<div data-ng-view></div>
 					</div>
 				</div>
@@ -84,6 +84,11 @@
 						</thead>
 						<thead>
 							<tr>
+								<td colspan="3"><input type="text"
+									placeholder="Search projects" class="form-control"
+									data-ng-model="projectSearchQuery" /></td>
+						<thead>
+							<tr>
 								<th></th>
 								<th>Project name</th>
 								<th></th>
@@ -91,7 +96,7 @@
 						</thead>
 						<tbody>
 							<tr
-								data-ng-repeat="project in userState.projects | orderBy : 'name'">
+								data-ng-repeat="project in userState.projects | filter : { name : projectSearchQuery } | orderBy : 'name'">
 								<td width="1%"><input type="checkbox"
 									data-ng-model="userState.subscriptions[project.id]" /></td>
 								<td>{{ project.name }}</td>
@@ -143,5 +148,11 @@
 	<script src="controllers/record.js"></script>
 	<script src="controllers/review.js"></script>
 	<script src="controllers/config.js"></script>
+	<script>
+		angular.module('myooApp').run(function($rootScope) {
+			$rootScope.isUserAdmin = ${isUserAdmin};
+			$rootScope.currentUserNickname = '${currentUserNickname}';
+		});
+	</script>
 </body>
 </html>

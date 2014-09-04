@@ -17,8 +17,13 @@ import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import com.google.appengine.api.datastore.EntityNotFoundException;
-import com.google.appengine.api.users.User;
 
+/**
+ * This controller class handles Project requests
+ * 
+ * @author ofuangka
+ *
+ */
 @Controller
 public class ProjectController extends BaseController {
 
@@ -42,13 +47,12 @@ public class ProjectController extends BaseController {
 
 	@RequestMapping(value = { "/projects" }, method = { org.springframework.web.bind.annotation.RequestMethod.POST }, consumes = { "application/json" })
 	public View insertProject(@RequestBody Project projectIn, ModelMap model) {
-		User currentUser = getCurrentUser();
 
 		// insert the project
-		Project projectOut = projectDao.put(projectIn.getName(), projectIn.getDescription(), currentUser.getNickname());
+		Project projectOut = projectDao.put(projectIn.getName(), projectIn.getDescription(), userDao.getCurrentUserNickname());
 
 		// have the user automatically subscribe to the project
-		subscriptionDao.put(userDao.getUserId(currentUser), projectOut.getId());
+		subscriptionDao.put(userDao.getUserId(), projectOut.getId());
 
 		// add the resulting project to the model
 		model.addAttribute("project", projectOut);
@@ -58,19 +62,26 @@ public class ProjectController extends BaseController {
 
 	@RequestMapping(value = { "/projects" }, method = { org.springframework.web.bind.annotation.RequestMethod.PUT }, consumes = { "application/json" })
 	public View updateProject(@RequestBody Project project, ModelMap model) throws NumberFormatException, EntityNotFoundException {
-		User currentUser = getCurrentUser();
 
-		model.put("project", projectDao.update(project.getId(), project.getName(), project.getDescription(), currentUser.getNickname()));
+		model.put("project", projectDao.update(project.getId(), project.getName(), project.getDescription(), userDao.getCurrentUserNickname()));
 
 		return new MappingJackson2JsonView();
 	}
 
 	@RequestMapping(value = { "/projects/{projectId}" }, method = { org.springframework.web.bind.annotation.RequestMethod.DELETE })
-	public View deleteProject(@PathVariable String projectId, ModelMap model) {
-		subscriptionDao.deleteByProjectId(projectId);
-		achievementDao.deleteByProjectId(projectId);
-		projectDao.delete(projectId);
+	public View deleteProject(@PathVariable String projectId, ModelMap model) throws NumberFormatException, EntityNotFoundException {
+
+		Project project = projectDao.get(projectId);
+
+		String currentUserNickname = userDao.getCurrentUserNickname();
+
+		if (currentUserNickname.equalsIgnoreCase(project.getCreatedBy()) || userDao.isUserAdmin()) {
+			subscriptionDao.deleteByProjectId(projectId);
+			achievementDao.deleteByProjectId(projectId);
+			projectDao.delete(projectId);
+		} else {
+			throw new SecurityException("User " + currentUserNickname + " attempting to delete project s/he does not own.");
+		}
 		return new MappingJackson2JsonView();
 	}
-
 }

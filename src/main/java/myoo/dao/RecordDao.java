@@ -18,6 +18,12 @@ import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
 import com.google.appengine.api.datastore.Query.Filter;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 
+/**
+ * This dao manages data access to the Record model
+ * 
+ * @author ofuangka
+ *
+ */
 @Repository
 public class RecordDao extends BaseDao {
 

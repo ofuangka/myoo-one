@@ -15,6 +15,12 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 
+/**
+ * This dao manages data access to the Subscription model
+ * 
+ * @author ofuangka
+ *
+ */
 @Repository
 public class SubscriptionDao extends BaseDao {
 

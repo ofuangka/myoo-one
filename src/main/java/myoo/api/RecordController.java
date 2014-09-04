@@ -22,6 +22,12 @@ import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import com.google.appengine.api.datastore.EntityNotFoundException;
 
+/**
+ * This controller handles Record requests
+ * 
+ * @author ofuangka
+ *
+ */
 @Controller
 public class RecordController extends BaseController {
 	private static final String ID_ALL = "all";
@@ -37,7 +43,7 @@ public class RecordController extends BaseController {
 
 	@RequestMapping(value = { "/projects/{projectId}/achievements/all/records" }, method = RequestMethod.DELETE)
 	public View deleteByProjectId(@PathVariable String projectId) {
-		recordDao.deleteByProjectIdByUserId(projectId, userDao.getUserId(getCurrentUser()));
+		recordDao.deleteByProjectIdByUserId(projectId, userDao.getUserId());
 		return new MappingJackson2JsonView();
 	}
 
@@ -45,7 +51,7 @@ public class RecordController extends BaseController {
 	public View getByProjectIdByAchievementId(@PathVariable String projectId, @PathVariable String achievementId, @RequestParam(required = false) String from,
 			@RequestParam(required = false) String to, ModelMap model) {
 
-		String userId = userDao.getUserId(getCurrentUser());
+		String userId = userDao.getUserId();
 
 		if (ID_ALL.equalsIgnoreCase(achievementId)) {
 			if (ID_ALL.equalsIgnoreCase(projectId)) {
@@ -78,7 +84,7 @@ public class RecordController extends BaseController {
 	public View insert(@PathVariable String projectId, @PathVariable String achievementId, @RequestBody Record record, ModelMap model)
 			throws NumberFormatException, EntityNotFoundException {
 
-		String userId = userDao.getUserId(getCurrentUser());
+		String userId = userDao.getUserId();
 
 		Achievement achievement = achievementDao.get(achievementId);
 

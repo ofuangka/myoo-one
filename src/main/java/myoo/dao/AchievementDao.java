@@ -18,6 +18,12 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 
+/**
+ * This dao manages data access to Achievement model
+ * 
+ * @author ofuangka
+ *
+ */
 @Repository
 public class AchievementDao extends BaseDao {
 

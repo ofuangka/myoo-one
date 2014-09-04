@@ -1,6 +1,7 @@
 package myoo.api;
 
 import myoo.dao.AchievementDao;
+import myoo.dao.UserDao;
 import myoo.dto.Achievement;
 import myoo.ext.BaseController;
 
@@ -14,13 +15,21 @@ import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import com.google.appengine.api.datastore.EntityNotFoundException;
-import com.google.appengine.api.users.User;
 
+/**
+ * This controller handles Achievement requests
+ * 
+ * @author ofuangka
+ *
+ */
 @Controller
 public class AchievementController extends BaseController {
 
 	@Autowired
 	private AchievementDao achievementDao;
+
+	@Autowired
+	private UserDao userDao;
 
 	@RequestMapping(value = { "/projects/{projectId}/achievements" }, method = { org.springframework.web.bind.annotation.RequestMethod.GET })
 	public View achievements(@PathVariable String projectId, ModelMap model) {
@@ -30,10 +39,9 @@ public class AchievementController extends BaseController {
 
 	@RequestMapping(value = { "/projects/{projectId}/achievements" }, method = { org.springframework.web.bind.annotation.RequestMethod.POST })
 	public View insertAchievement(@PathVariable String projectId, @RequestBody Achievement achievement, ModelMap model) {
-		User currentUser = getCurrentUser();
 
 		model.addAttribute("achievement",
-				achievementDao.put(projectId, achievement.getName(), achievement.getDescription(), achievement.getPoints(), currentUser.getNickname()));
+				achievementDao.put(projectId, achievement.getName(), achievement.getDescription(), achievement.getPoints(), userDao.getCurrentUserNickname()));
 
 		return new MappingJackson2JsonView();
 	}
@@ -42,12 +50,10 @@ public class AchievementController extends BaseController {
 	public View updateAchievement(@PathVariable String projectId, @RequestBody Achievement achievement, ModelMap model) throws NumberFormatException,
 			EntityNotFoundException {
 
-		User currentUser = getCurrentUser();
-
 		model.addAttribute(
 				"achievement",
 				achievementDao.update(achievement.getId(), achievement.getProjectId(), achievement.getName(), achievement.getDescription(),
-						achievement.getPoints(), currentUser.getNickname()));
+						achievement.getPoints(), userDao.getCurrentUserNickname()));
 
 		return new MappingJackson2JsonView();
 	}

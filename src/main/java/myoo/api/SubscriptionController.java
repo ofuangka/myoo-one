@@ -19,6 +19,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
+/**
+ * This controller handles Subscription requests
+ * 
+ * @author ofuangka
+ *
+ */
 @Controller
 public class SubscriptionController extends BaseController {
 
@@ -30,7 +36,7 @@ public class SubscriptionController extends BaseController {
 
 	@RequestMapping(value = "/subscriptions", method = RequestMethod.GET)
 	public View subscriptions(ModelMap model) {
-		model.addAttribute("subscriptions", getAsMap(subscriptionDao.getByUserId(userDao.getUserId(getCurrentUser()))));
+		model.addAttribute("subscriptions", getAsMap(subscriptionDao.getByUserId(userDao.getUserId())));
 		return new MappingJackson2JsonView();
 	}
 
@@ -55,7 +61,7 @@ public class SubscriptionController extends BaseController {
 	 */
 	@RequestMapping(value = "/subscriptions", method = RequestMethod.POST)
 	public View updateSubscriptions(@RequestBody Map<String, Boolean> subscriptions, ModelMap model) {
-		String userId = userDao.getUserId(getCurrentUser());
+		String userId = userDao.getUserId();
 		subscriptionDao.deleteByUserId(userId);
 		Set<String> newSubscriptions = subscriptions.keySet();
 		if (newSubscriptions != null) {

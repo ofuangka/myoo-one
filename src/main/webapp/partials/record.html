@@ -2,7 +2,7 @@
 	<table class="table table-bordered table-striped table-hover">
 		<thead>
 			<tr>
-				<td colspan="3"><input data-ng-model="searchQuery"
+				<td colspan="2"><input data-ng-model="searchQuery"
 					class="form-control" placeholder="Search achievements" /></td>
 			</tr>
 		</thead>
@@ -10,12 +10,11 @@
 			<tr>
 				<th width="1%"></th>
 				<th>Name</th>
-				<th width="1%">Points</th>
 			</tr>
 		</thead>
 		<thead>
 			<tr>
-				<th colspan="3">Remaining</th>
+				<th colspan="2">Remaining</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -23,37 +22,55 @@
 				data-ng-repeat="achievement in userState.achievements | filter : { name : searchQuery, completed : false } | orderBy : 'name'"
 				data-ng-click="completeAchievement(achievement)" data-ng-cloak
 				class="cursor-pointer">
-				<td><a class="thumbnail"><img
+				<td class="text-center"><a class="thumbnail"><img
 						data-ng-src="{{ achievement.src }}" class="achievementIcon"
-						alt="Achievement icon" /></a></td>
+						alt="Achievement icon" /><br /><span class="badge">{{
+							achievement.points }}&mu;</span></a></td>
 				<td>
 					<dl>
 						<dt>{{ achievement.name }}</dt>
 						<dd>{{ achievement.description }}</dd>
 					</dl>
-					<p class="text-right" data-ng-if="achievement.lastUpdatedBy"><small>Last updated by {{ achievement.lastUpdatedBy }} on {{ achievement.lastUpdatedTs | date : 'medium' }}</small></p>
+					<p class="text-right" data-ng-if="achievement.lastUpdatedBy">
+						<small>Last updated by {{ achievement.lastUpdatedBy }} on
+							{{ achievement.lastUpdatedTs | date : 'medium' }}</small>
+					</p>
 				</td>
-				<td><span class="badge">{{ achievement.points }}&mu;</span></td>
 			</tr>
-            <tr data-ng-if="(userState.achievements | filter : { name : searchQuery, completed : false }).length === 0">
-                <td colspan="3" data-ng-switch="(userState.achievements | filter : { completed : true }).length">
-                	<span data-ng-switch-when="0">This project has no achievements. <a href="#/project/{{ userState.currentProjectId }}/section/config">Add some</a>?</span>
-                	<span data-ng-switch-default>Yay! You completed all the achievements for today!</span>
-                </td>
-            </tr>
+			<tr
+				data-ng-if="(userState.achievements | filter : { name : searchQuery, completed : false }).length === 0">
+				<td colspan="2"
+					data-ng-switch="(userState.achievements | filter : { completed : true }).length">
+					<span data-ng-switch-when="0">This project has no
+						achievements. <a
+						href="#/project/{{ userState.currentProjectId }}/section/config">Add
+							some</a>?
+				</span> <span data-ng-switch-default>Yay! You completed all the
+						achievements for today!</span>
+				</td>
+			</tr>
 		</tbody>
-        <thead>
-            <tr><th colspan="3">Completed</th></tr>
-        </thead>
-        <tbody>
-            <tr data-ng-repeat="achievement in userState.achievements | filter : { name : searchQuery, completed : true } | orderBy : 'name'">
-                <td><a class="thumbnail"><img data-ng-src="{{ achievement.src }}" class="achievementIcon" alt="Achievement icon" /></a></td>
-                <td><dl><dt>{{ achievement.name }}</dt><dd>{{ achievement.description }}</dd></dl></td>
-                <td><span class="badge">{{ achievement.points }}&mu;</span></td>
-            </tr>
-            <tr data-ng-if="(userState.achievements | filter : { name : searchQuery, completed : true }).length === 0">
-                <td colspan="3">No achievements :(</td>
-            </tr>
-        </tbody>
+		<thead>
+			<tr>
+				<th colspan="2">Completed</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr
+				data-ng-repeat="achievement in userState.achievements | filter : { name : searchQuery, completed : true } | orderBy : 'name'">
+				<td class="text-center"><a class="thumbnail"><img
+						data-ng-src="{{ achievement.src }}" class="achievementIcon"
+						alt="Achievement icon" /><br /><span class="badge">{{
+							achievement.points }}&mu;</span></a></td>
+				<td><dl>
+						<dt>{{ achievement.name }}</dt>
+						<dd>{{ achievement.description }}</dd>
+					</dl></td>
+			</tr>
+			<tr
+				data-ng-if="(userState.achievements | filter : { name : searchQuery, completed : true }).length === 0">
+				<td colspan="2">No achievements :(</td>
+			</tr>
+		</tbody>
 	</table>
 </div>

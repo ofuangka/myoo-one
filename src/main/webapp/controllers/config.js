@@ -1,5 +1,5 @@
 angular.module('myooApp')
-    .controller('configCtrl', function($scope, $http, $location, FN_AJAX_FAILURE) {
+    .controller('configCtrl', ['$scope', '$http', '$location', 'FN_AJAX_FAILURE', function($scope, $http, $location, FN_AJAX_FAILURE) {
         $scope.addAchievement = function() {
         	$http.post('api/projects/' + $scope.userState.currentProjectId + '/achievements', {
         		
@@ -35,4 +35,4 @@ angular.module('myooApp')
         $scope.getAchievementsPromise($scope.userState.currentProjectId).then(function doOnAjaxSuccess(response) {
             $scope.userState.achievements = response.data.achievements;
         }, FN_AJAX_FAILURE);
-    });
+    }]);
