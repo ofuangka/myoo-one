@@ -40,7 +40,7 @@
 				</div>
 				<div class="row" data-ng-cloak>
 					<div class="col-md-3 col-sm-4">
-						<ul class="nav nav-pills nav-stacked" data-ng-cloak>
+						<ul class="nav nav-pills nav-stacked hidden-xs" data-ng-cloak>
 							<li
 								data-ng-repeat="project in userState.projects | filter : isSubscribed"
 								data-ng-class="{ 'active' : project.id === userState.currentProjectId }">
@@ -49,6 +49,9 @@
 								title="{{ project.description }}">{{ project.name }}</a>
 							</li>
 						</ul>
+						<select class="form-control visible-xs" data-ng-model="userState.currentProjectId" data-ng-options="project.id as project.name for project in userState.projects | orderBy : 'name'">
+							<option data-ng-if="userState.projects.length === 0" value="">No projects</option>
+						</select>
 						<div class="text-center padding-md">
 							<button data-ng-click="createProject()" class="btn btn-default">+
 								Create project</button>
