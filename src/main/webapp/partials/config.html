@@ -38,8 +38,9 @@
 			<thead>
 				<tr>
 					<th>Name</th>
-					<th width="55%">Description</th>
+					<th class="hidden-xs" width="55%">Description</th>
 					<th width="15%">Points</th>
+					<!-- <th class="visible-xs" width="1%"></th> -->
 					<th width="1%"></th>
 				</tr>
 			</thead>
@@ -50,9 +51,9 @@
 						data-save-on-event="blur"
 						data-save-url="'api/projects/' + userState.currentProjectId + '/achievements'"
 						data-save-post-data="achievement" /></td>
-					<td><input class="form-control" placeholder="Description"
-						maxlength="255" data-ng-model="achievement.description"
-						data-save-on-event="blur"
+					<td class="hidden-xs"><input class="form-control"
+						placeholder="Description" maxlength="255"
+						data-ng-model="achievement.description" data-save-on-event="blur"
 						data-save-url="'api/projects/' + userState.currentProjectId + '/achievements'"
 						data-save-post-data="achievement" /></td>
 					<td><input type="number" class="form-control"
@@ -60,12 +61,26 @@
 						data-ng-model="achievement.points" data-save-on-event="blur"
 						data-save-url="'api/projects/' + userState.currentProjectId + '/achievements'"
 						data-save-post-data="achievement" /></td>
+					<!-- <td class="text-center visible-xs"><a
+						data-ng-click="editAchievement(achievement)"><span
+							class="glyphicon glyphicon-pencil"></span></a></td> -->
 					<td class="text-center"><a
-						data-ng-click="deleteAchievement(achievement)"><span class="hidden-xs">Delete</span><span class="visible-xs glyphicon glyphicon-remove"></span></a></td>
+						data-ng-click="deleteAchievement(achievement)"><span
+							class="hidden-xs">Delete</span></a>
+						<button class="visible-xs btn btn-default"
+							data-ng-click="deleteAchievement(achievement)">
+							<span class="glyphicon glyphicon-remove"></span>
+						</button></td>
 				</tr>
 				<tr>
-					<td colspan="3"></td>
-					<td class="text-center"><a data-ng-click="addAchievement()"><span class="hidden-xs">Add</span><span class="visible-xs glyphicon glyphicon-plus"></span></a></td>
+					<td colspan="2"></td>
+					<td class="hidden-xs"></td>
+					<td class="text-center"><a data-ng-click="addAchievement()"><span
+							class="hidden-xs">Add</span></a>
+						<button class="visible-xs btn btn-default"
+							data-ng-click="addAchievement()">
+							<span class="visible-xs glyphicon glyphicon-plus"></span>
+						</button></td>
 				</tr>
 			</tbody>
 		</table>
