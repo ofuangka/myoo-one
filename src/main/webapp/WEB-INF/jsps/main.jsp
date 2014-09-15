@@ -79,7 +79,7 @@
 				</div>
 				<div id="preferencesBoxBody" class="modal-body">
 					<table data-ng-if="userState.projects.length > 0"
-						class="table table-bordered table-striped table-hover">
+						class="table table-bordered table-striped">
 						<thead>
 							<tr>
 								<th colspan="3">Subscriptions</th>

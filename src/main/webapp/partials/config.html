@@ -1,6 +1,6 @@
 <div data-ng-controller="configCtrl">
 	<form name="configForm">
-		<table class="table table-bordered table-striped table-hover">
+		<table class="table table-bordered table-striped">
 			<tbody>
 				<tr data-ng-cloak>
 					<td class="text-right"><small>Created by {{
@@ -28,13 +28,13 @@
 				</tr>
 				<tr
 					data-ng-if="isUserAdmin || (getProjectById(userState.currentProjectId)).createdBy === currentUserNickname">
-					<td class="text-center"><a
-						data-ng-click="confirmDeleteProject((getProjectById(userState.currentProjectId)))">Delete
-							project</a></td>
+					<td class="text-center"><button class="btn btn-default"
+							data-ng-click="confirmDeleteProject((getProjectById(userState.currentProjectId)))">Delete
+							project</button></td>
 				</tr>
 			</tbody>
 		</table>
-		<table class="table table-bordered table-striped table-hover">
+		<table class="table table-bordered table-striped">
 			<thead>
 				<tr>
 					<th>Name</th>
@@ -75,8 +75,9 @@
 				<tr>
 					<td colspan="2"></td>
 					<td class="hidden-xs"></td>
-					<td class="text-center"><a data-ng-click="addAchievement()"><span
-							class="hidden-xs">Add</span></a>
+					<td class="text-center"><button
+							class="btn btn-default hidden-xs"
+							data-ng-click="addAchievement()">Add</button>
 						<button class="visible-xs btn btn-default"
 							data-ng-click="addAchievement()">
 							<span class="visible-xs glyphicon glyphicon-plus"></span>
