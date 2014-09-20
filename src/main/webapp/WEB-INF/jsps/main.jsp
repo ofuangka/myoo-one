@@ -49,7 +49,7 @@
 								title="{{ project.description }}">{{ project.name }}</a>
 							</li>
 						</ul>
-						<select class="form-control visible-xs" data-ng-model="userState.currentProjectId" data-ng-options="project.id as project.name for project in userState.projects | orderBy : 'name'">
+						<select class="form-control visible-xs" data-ng-model="userState.mobileCurrentProjectId" data-ng-options="project.id as project.name for project in userState.projects | filter : isSubscribed">
 							<option data-ng-if="userState.projects.length === 0" value="">No projects</option>
 						</select>
 						<div class="text-center padding-md">
@@ -135,8 +135,8 @@
 		</div>
 	</div>
 	<script src="libs/jquery/2.1.1/jquery-2.1.1.min.js"></script>
-	<script src="libs/angularjs/1.3.0-rc.0/angular.min.js"></script>
-	<script src="libs/angularjs/1.3.0-rc.0/angular-route.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-rc.2/angular.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-rc.2/angular-route.min.js"></script>
 	<script src="libs/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 	<script src="https://www.google.com/jsapi"></script>
 	<script>

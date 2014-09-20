@@ -4,7 +4,7 @@ angular.module('myooApp')
 			if (angular.isUndefined(data) || data === null) {
 				return dash || '--';
 			} else if (angular.isString(data)) {
-				if ($.trim(data).length === 0) {
+				if (data.length === 0) {
 					return dash || '--';
 				} else {
 					return data;

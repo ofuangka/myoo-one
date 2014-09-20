@@ -16,6 +16,8 @@ angular.module('myooApp')
 							}).then(function onAjaxSuccess(response) {
 								var responseData = response.data,
 									update = {};
+								
+								// assume that the response is in the form { key : { lastUpdatedBy, lastUpdatedTs } }
 								for (var key in responseData) {
 									update = responseData[key];
 								}

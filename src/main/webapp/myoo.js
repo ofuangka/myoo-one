@@ -91,7 +91,17 @@ angular.module('myooApp', ['ngRoute'])
         };
         $scope.$on('$routeChangeSuccess', function onRouteChangeSuccess() {
             $scope.userState.currentProjectId = $route.current.params.projectId;
+            $scope.userState.mobileCurrentProjectId = $route.current.params.projectId;
             $scope.userState.currentSectionId = $route.current.params.sectionId;
+        });
+        $scope.$watch('userState.mobileCurrentProjectId', function doOnMobileCurrentProjectIdChange(newValue, oldValue) {
+        	if (angular.isDefined(newValue) && angular.isDefined(oldValue) && newValue !== oldValue) {
+        		if (angular.isDefined($scope.userState.currentSectionId)) {
+        			$location.path('/project/' + newValue + '/section/' + $scope.userState.currentSectionId);
+        		} else {
+        			$location.path('/project/' + newValue);
+        		}
+        	}
         });
         $scope.createProject = function() {
         	$http.post('api/projects', {
