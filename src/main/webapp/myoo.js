@@ -43,6 +43,9 @@ angular.module('myooApp', ['ngRoute'])
     	};
     }])
     .config(['$routeProvider', '$httpProvider', 'DEFAULT_SECTION_ID', function($routeProvider, $httpProvider, DEFAULT_SECTION_ID) {
+    	window.addEventListener('load', function() {
+    		new FastClick(document.body);
+    	}, false);
     	$('#alertBox').modal({
         	show : false
         });

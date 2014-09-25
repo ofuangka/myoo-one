@@ -14,21 +14,22 @@
 				<tr class="form-group">
 					<td><label for="projectName">Project name</label> <input
 						id="projectName" class="form-control" maxlength="100"
+						placeholder="Project name"
 						data-ng-model="(getProjectById(userState.currentProjectId)).name"
 						data-save-on-event="blur" data-save-url="'api/projects'"
 						data-save-post-data="(getProjectById(userState.currentProjectId))" /></td>
 				</tr>
 				<tr class="form-group">
 					<td><label for="projectDescription">Project
-							description</label> <input id="projectDescription" class="form-control"
-						maxlength="255"
-						data-ng-model="(getProjectById(userState.currentProjectId)).description"
-						data-save-on-event="blur" data-save-url="'api/projects'"
-						data-save-post-data="(getProjectById(userState.currentProjectId))" /></td>
+							description</label> <textarea id="projectDescription"
+							class="form-control" rows="3"
+							data-ng-model="(getProjectById(userState.currentProjectId)).description"
+							data-save-on-event="blur" data-save-url="'api/projects'"
+							data-save-post-data="(getProjectById(userState.currentProjectId))"></textarea></td>
 				</tr>
 				<tr
 					data-ng-if="isUserAdmin || (getProjectById(userState.currentProjectId)).createdBy === currentUserNickname">
-					<td class="text-center"><button class="btn btn-default"
+					<td class="text-center"><button class="btn btn-danger"
 							data-ng-click="confirmDeleteProject((getProjectById(userState.currentProjectId)))">Delete
 							project</button></td>
 				</tr>
@@ -46,44 +47,82 @@
 			</thead>
 			<tbody>
 				<tr data-ng-repeat="achievement in userState.achievements">
-					<td><input class="form-control" maxlength="100"
+					<td><input class="form-control hidden-xs" maxlength="100"
 						placeholder="Name" data-ng-model="achievement.name"
 						data-save-on-event="blur"
 						data-save-url="'api/projects/' + userState.currentProjectId + '/achievements'"
-						data-save-post-data="achievement" /></td>
+						data-save-post-data="achievement" /><span class="visible-xs">{{achievement.name}}</span></td>
 					<td class="hidden-xs"><input class="form-control"
-						placeholder="Description" maxlength="255"
+						maxlength="255" placeholder="Description"
 						data-ng-model="achievement.description" data-save-on-event="blur"
 						data-save-url="'api/projects/' + userState.currentProjectId + '/achievements'"
 						data-save-post-data="achievement" /></td>
-					<td><input type="number" class="form-control"
-						placeholder="Points" maxlength="3"
+					<td><input class="form-control hidden-xs" type="number"
+						maxlength="3" placeholder="Points"
 						data-ng-model="achievement.points" data-save-on-event="blur"
 						data-save-url="'api/projects/' + userState.currentProjectId + '/achievements'"
-						data-save-post-data="achievement" /></td>
-					<!-- <td class="text-center visible-xs"><a
-						data-ng-click="editAchievement(achievement)"><span
-							class="glyphicon glyphicon-pencil"></span></a></td> -->
-					<td class="text-center"><a
-						data-ng-click="deleteAchievement(achievement)"><span
-							class="hidden-xs">Delete</span></a>
-						<button class="visible-xs btn btn-default"
-							data-ng-click="deleteAchievement(achievement)">
-							<span class="glyphicon glyphicon-remove"></span>
-						</button></td>
+						data-save-post-data="achievement" /><span class="visible-xs">{{achievement.points}}</span></td>
+					<td class="text-center">
+						<button class="btn btn-default"
+							data-ng-click="editAchievement(achievement)">
+							<span class="hidden-xs">Edit</span> <span
+								class="visible-xs glyphicon glyphicon-pencil"></span>
+						</button>
+					</td>
 				</tr>
 				<tr>
 					<td colspan="2"></td>
 					<td class="hidden-xs"></td>
-					<td class="text-center"><button
-							class="btn btn-default hidden-xs"
+					<td class="text-center">
+						<button class="btn btn-default hidden-xs"
 							data-ng-click="addAchievement()">Add</button>
-						<button class="visible-xs btn btn-default"
-							data-ng-click="addAchievement()">
+						<button class="btn btn-default visible-xs"
+							data-ng-click="addAndEditAchievement()">
 							<span class="visible-xs glyphicon glyphicon-plus"></span>
-						</button></td>
+						</button>
+
+					</td>
 				</tr>
 			</tbody>
 		</table>
 	</form>
+	<div id="editBox" class="modal fade" tabindex="-1" role="dialog"
+		aria-labelledby="Edit" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">
+						<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+					</button>
+					<h4 class="modal-title">Edit</h4>
+				</div>
+				<div class="modal-body">
+					<div class="form-group">
+						<label for="achievementName">Name</label> <input
+							id="achievementName" class="form-control" placeholder="Name"
+							data-ng-model="userState.currentAchievement.name" />
+					</div>
+					<div class="form-group">
+						<label for="achievementDescription">Description</label>
+						<textarea id="achievementDescription" class="form-control"
+							rows="3" data-ng-model="userState.currentAchievement.description"></textarea>
+					</div>
+					<div class="form-group">
+						<label for="achievementPoints">Points</label> <input
+							id="achievementPoints" class="form-control" type="number"
+							placeholder="Points"
+							data-ng-model="userState.currentAchievement.points" />
+					</div>
+					<div class="form-group text-center">
+						<button type="button" class="btn btn-danger"
+							data-ng-click="deleteAchievement(userState.currentAchievement)">Delete
+							achievement</button>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>

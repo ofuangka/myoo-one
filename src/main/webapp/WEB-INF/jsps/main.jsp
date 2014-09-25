@@ -7,6 +7,15 @@
 
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+
+<!-- http://www.luster.io/blog/9-29-14-mobile-web-checklist.html -->
+<!-- android -->
+<meta name="mobile-web-app-capable" content="yes">
+<!-- iOS -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="translucent-black">
+<meta name="apple-mobile-web-app-title" content="/myoo/">
+<meta http-equiv="cleartype" content="on">
 </head>
 <body data-ng-controller="rootCtrl">
 	<div class="container-fluid">
@@ -144,6 +153,7 @@
 			'packages' : [ 'corechart' ]
 		});
 	</script>
+	<script src="libs/fastclick/1.0.3-7/fastclick.js"></script>
 	<script src="myoo.js"></script>
 	<script src="filters/dash.js"></script>
 	<script src="directives/save-on-event.js"></script>

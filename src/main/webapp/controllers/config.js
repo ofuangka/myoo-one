@@ -1,15 +1,31 @@
 angular.module('myooApp')
     .controller('configCtrl', ['$scope', '$http', '$location', 'FN_AJAX_FAILURE', function($scope, $http, $location, FN_AJAX_FAILURE) {
-        $scope.addAchievement = function() {
+    	$('#editBox').modal({
+    		show : false
+    	});
+    	$scope.editAchievement = function(achievement) {
+    		$scope.userState.currentAchievement = achievement;
+    		$('#editBox').modal('show');
+    	};
+    	$scope.addAchievement = function() {
         	$http.post('api/projects/' + $scope.userState.currentProjectId + '/achievements', {
         		
         	}).then(function onAjaxSuccess(response) {
                 $scope.userState.achievements.push(response.data.achievement);
         	}, FN_AJAX_FAILURE);
         };
+        $scope.addAndEditAchievement = function() {
+        	$http.post('api/projects/' + $scope.userState.currentProjectId + '/achievements', {
+        		
+        	}).then(function onAjaxSuccess(response) {
+                $scope.userState.achievements.push(response.data.achievement);
+                $scope.editAchievement(response.data.achievement);
+        	}, FN_AJAX_FAILURE);
+        };
         $scope.deleteAchievement = function(achievement) {
         	$http.delete('api/projects/' + $scope.userState.currentProjectId + '/achievements/' + achievement.id, {}).then(function onAjaxSuccess() {
                 $scope.userState.achievements.splice($scope.userState.achievements.indexOf(achievement), 1);
+                $('#editBox').modal('hide');
         	}, FN_AJAX_FAILURE);
         };
         $scope.confirmDeleteProject = function(project) {
