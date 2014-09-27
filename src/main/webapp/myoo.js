@@ -16,9 +16,12 @@ angular.module('myooApp', ['ngRoute'])
     ])
     .constant('DATE_REGEX', /\d{4}-\d{2}-\d{2}/)
     .constant('FN_AJAX_FAILURE', function ajaxFailure(jqXhr) {
+    	/*
     	$('#alertBoxTitle').html('Uh oh...');
     	$('#alertBoxBody').html('Something went terribly wrong, and the page won\'t work as expected. Please wait and try again a little later.');
         $('#alertBox').modal('show');
+        */
+    	$('#alertMsg').show();
     })
     .constant('TODAY', new Date())
     .constant('LAST_WEEK', (function() {
@@ -46,6 +49,9 @@ angular.module('myooApp', ['ngRoute'])
     	window.addEventListener('load', function() {
     		new FastClick(document.body);
     	}, false);
+    	$('#alertMsg .close').on('click', function(e) {
+    		$(this).parent().hide();
+    	});
     	$('#alertBox').modal({
         	show : false
         });

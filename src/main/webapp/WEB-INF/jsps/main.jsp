@@ -70,6 +70,13 @@
 						</div>
 					</div>
 					<div class="col-md-9 col-sm-8 padding-md">
+						<div id="alertMsg" class="alert alert-danger" role="alert" style="display: none;">
+							<button type="button" class="close">
+								<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+							</button>
+							The last request didn't work correctly. If you keep experiencing
+							issues, you might need to sign out and sign back in.
+						</div>
 						<div data-ng-view></div>
 					</div>
 				</div>
