@@ -49,12 +49,12 @@
 				<tr data-ng-repeat="achievement in userState.achievements">
 					<td class="text-center"><a class="thumbnail"><span
 							class="achievementIcon" title="Achievement icon"
-							style="background-position-x: {{ achievement.backgroundPositionX }}; background-position-y: {{ achievement.backgroundPositionY }}"></span></a></td>
+							style="background-position-x: {{ achievement.backgroundPositionX }}px; background-position-y: {{ achievement.backgroundPositionY }}px"></span></a></td>
 					<td><input class="form-control hidden-xs" maxlength="100"
 						placeholder="Name" data-ng-model="achievement.name"
 						data-save-on-event="blur"
 						data-save-url="'api/projects/' + userState.currentProjectId + '/achievements'"
-						data-save-post-data="achievement" /><span class="visible-xs">{{achievement.name}}</span></td>
+						data-save-post-data="achievement" /><span class="visible-xs">{{ achievement.name }}</span></td>
 					<td class="hidden-xs"><input class="form-control"
 						maxlength="255" placeholder="Description"
 						data-ng-model="achievement.description" data-save-on-event="blur"
@@ -64,7 +64,7 @@
 						maxlength="3" placeholder="Points"
 						data-ng-model="achievement.points" data-save-on-event="blur"
 						data-save-url="'api/projects/' + userState.currentProjectId + '/achievements'"
-						data-save-post-data="achievement" /><span class="visible-xs">{{achievement.points}}</span></td>
+						data-save-post-data="achievement" /><span class="visible-xs">{{ achievement.points }}</span></td>
 					<td class="text-center">
 						<button class="btn btn-default"
 							data-ng-click="editAchievement(achievement)">
@@ -105,7 +105,7 @@
 					<div class="form-group text-center">
 						<a class="badgePopover thumbnail"><span
 							class="achievementIcon" title="Achievement icon"
-							style="background-position-x: {{ achievement.backgroundPositionX }}; background-position-y: {{ achievement.backgroundPositionY }}"></span></a>
+							style="background-position-x: {{ userState.currentAchievement.backgroundPositionX }}px; background-position-y: {{ userState.currentAchievement.backgroundPositionY }}px"></span></a>
 					</div>
 					<div class="form-group">
 						<label for="achievementName">Name</label>
