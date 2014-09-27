@@ -38,10 +38,13 @@ public class AchievementDao extends BaseDao {
 		ret.setName((String) achievementEntity.getProperty("name"));
 		ret.setPoints(((Long) achievementEntity.getProperty("points")).intValue());
 		ret.setProjectId((String) achievementEntity.getProperty("projectId"));
+		ret.setBackgroundPositionX(((Long) achievementEntity.getProperty("backgroundPositionX")).intValue());
+		ret.setBackgroundPositionY(((Long) achievementEntity.getProperty("backgroundPositionY")).intValue());
 		return ret;
 	}
 
-	public Achievement put(String projectId, String name, String description, Integer points, String createdBy) {
+	public Achievement put(String projectId, String name, String description, Integer points, String createdBy, Integer backgroundPositionX,
+			Integer backgroundPositionY) {
 		Date now = Calendar.getInstance().getTime();
 
 		Entity achievementEntity = new Entity("Achievement");
@@ -55,6 +58,9 @@ public class AchievementDao extends BaseDao {
 
 		achievementEntity.setProperty("lastUpdatedTs", now);
 
+		achievementEntity.setProperty("backgroundPositionX", backgroundPositionX);
+		achievementEntity.setProperty("backgroundPositionY", backgroundPositionY);
+
 		Key key = getDatastore().put(achievementEntity);
 
 		Achievement ret = new Achievement();
@@ -67,13 +73,15 @@ public class AchievementDao extends BaseDao {
 		ret.setLastUpdatedBy(createdBy);
 		ret.setPoints(points);
 		ret.setLastUpdatedTs(now);
+		ret.setBackgroundPositionX(backgroundPositionX);
+		ret.setBackgroundPositionY(backgroundPositionY);
 
 		return ret;
 
 	}
 
-	public Achievement update(String achievementId, String projectId, String name, String description, Integer points, String lastUpdatedBy)
-			throws NumberFormatException, EntityNotFoundException {
+	public Achievement update(String achievementId, String projectId, String name, String description, Integer points, String lastUpdatedBy,
+			Integer backgroundPositionX, Integer backgroundPositionY) throws NumberFormatException, EntityNotFoundException {
 		Date now = Calendar.getInstance().getTime();
 
 		Achievement ret = get(achievementId);
@@ -90,6 +98,9 @@ public class AchievementDao extends BaseDao {
 
 		achievementEntity.setProperty("lastUpdatedTs", now);
 
+		achievementEntity.setProperty("backgroundPositionX", backgroundPositionX);
+		achievementEntity.setProperty("backgroundPositionY", backgroundPositionY);
+
 		getDatastore().put(achievementEntity);
 
 		ret.setDescription(description);
@@ -97,6 +108,9 @@ public class AchievementDao extends BaseDao {
 		ret.setLastUpdatedTs(now);
 		ret.setName(name);
 		ret.setPoints(points);
+
+		ret.setBackgroundPositionX(backgroundPositionX);
+		ret.setBackgroundPositionY(backgroundPositionY);
 
 		return ret;
 	}
@@ -138,6 +152,9 @@ public class AchievementDao extends BaseDao {
 				achievement.setName((String) entity.getProperty("name"));
 				achievement.setPoints(((Long) entity.getProperty("points")).intValue());
 				achievement.setProjectId((String) entity.getProperty("projectId"));
+				achievement.setBackgroundPositionX(((Long) entity.getProperty("backgroundPositionX")).intValue());
+				achievement.setBackgroundPositionY(((Long) entity.getProperty("backgroundPositionY")).intValue());
+
 				ret.add(achievement);
 			}
 		}

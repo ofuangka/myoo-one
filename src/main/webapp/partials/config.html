@@ -37,6 +37,7 @@
 		<table class="table table-bordered table-striped">
 			<thead>
 				<tr>
+					<th>Badge</th>
 					<th>Name</th>
 					<th class="hidden-xs" width="55%">Description</th>
 					<th width="15%">Points</th>
@@ -46,6 +47,9 @@
 			</thead>
 			<tbody>
 				<tr data-ng-repeat="achievement in userState.achievements">
+					<td class="text-center"><a class="thumbnail"><span
+							class="achievementIcon" title="Achievement icon"
+							style="background-position-x: {{ achievement.backgroundPositionX }}; background-position-y: {{ achievement.backgroundPositionY }}"></span></a></td>
 					<td><input class="form-control hidden-xs" maxlength="100"
 						placeholder="Name" data-ng-model="achievement.name"
 						data-save-on-event="blur"
@@ -70,8 +74,10 @@
 					</td>
 				</tr>
 				<tr>
-					<td colspan="2"></td>
+					<td></td>
+					<td></td>
 					<td class="hidden-xs"></td>
+					<td></td>
 					<td class="text-center">
 						<button class="btn btn-default hidden-xs"
 							data-ng-click="addAchievement()">Add</button>
@@ -96,6 +102,11 @@
 					<h4 class="modal-title">Edit</h4>
 				</div>
 				<div class="modal-body">
+					<div class="form-group text-center">
+						<a class="badgePopover thumbnail"><span
+							class="achievementIcon" title="Achievement icon"
+							style="background-position-x: {{ achievement.backgroundPositionX }}; background-position-y: {{ achievement.backgroundPositionY }}"></span></a>
+					</div>
 					<div class="form-group">
 						<label for="achievementName">Name</label>
 						<textarea id="achievementName" class="form-control" rows="2"

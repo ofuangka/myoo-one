@@ -40,8 +40,8 @@ public class AchievementController extends BaseController {
 	@RequestMapping(value = { "/projects/{projectId}/achievements" }, method = { org.springframework.web.bind.annotation.RequestMethod.POST })
 	public View insertAchievement(@PathVariable String projectId, @RequestBody Achievement achievement, ModelMap model) {
 
-		model.addAttribute("achievement",
-				achievementDao.put(projectId, achievement.getName(), achievement.getDescription(), achievement.getPoints(), userDao.getCurrentUserNickname()));
+		model.addAttribute("achievement", achievementDao.put(projectId, achievement.getName(), achievement.getDescription(), achievement.getPoints(),
+				userDao.getCurrentUserNickname(), achievement.getBackgroundPositionX(), achievement.getBackgroundPositionY()));
 
 		return new MappingJackson2JsonView();
 	}
@@ -53,7 +53,7 @@ public class AchievementController extends BaseController {
 		model.addAttribute(
 				"achievement",
 				achievementDao.update(achievement.getId(), achievement.getProjectId(), achievement.getName(), achievement.getDescription(),
-						achievement.getPoints(), userDao.getCurrentUserNickname()));
+						achievement.getPoints(), userDao.getCurrentUserNickname(), achievement.getBackgroundPositionX(), achievement.getBackgroundPositionY()));
 
 		return new MappingJackson2JsonView();
 	}
