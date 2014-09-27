@@ -51,15 +51,18 @@
 					<div class="col-md-3 col-sm-4">
 						<ul class="nav nav-pills nav-stacked hidden-xs" data-ng-cloak>
 							<li
-								data-ng-repeat="project in userState.projects | filter : isSubscribed"
+								data-ng-repeat="project in userState.projects | orderBy : 'id' | filter : isSubscribed"
 								data-ng-class="{ 'active' : project.id === userState.currentProjectId }">
 								<a
 								href="#/project/{{ project.id }}/section/{{ userState.currentSectionId }}"
 								title="{{ project.description }}">{{ project.name }}</a>
 							</li>
 						</ul>
-						<select class="form-control visible-xs" data-ng-model="userState.mobileCurrentProjectId" data-ng-options="project.id as project.name for project in userState.projects | filter : isSubscribed">
-							<option data-ng-if="userState.projects.length === 0" value="">No projects</option>
+						<select class="form-control visible-xs" data-ng-if="userState.projects.length === 0">
+							<option value="">No projects</option>
+						</select>
+						<select class="form-control visible-xs" data-ng-if="userState.projects.length > 0" data-ng-model="userState.mobileCurrentProjectId" data-ng-options="project.id as project.name for project in userState.projects | filter : isSubscribed">
+							<option value="">Select a project</option>							
 						</select>
 						<div class="text-center padding-md">
 							<button data-ng-click="createProject()" class="btn btn-default">+

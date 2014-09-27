@@ -42,7 +42,7 @@ angular.module('myooApp', ['ngRoute'])
     		}
     	};
     }])
-    .config(['$routeProvider', '$httpProvider', 'DEFAULT_SECTION_ID', function($routeProvider, $httpProvider, DEFAULT_SECTION_ID) {
+    .config(['$routeProvider', '$httpProvider', 'DEFAULT_SECTION_ID', 'SECTIONS', function($routeProvider, $httpProvider, DEFAULT_SECTION_ID, SECTIONS) {
     	window.addEventListener('load', function() {
     		new FastClick(document.body);
     	}, false);
@@ -53,6 +53,14 @@ angular.module('myooApp', ['ngRoute'])
     		show : false
     	});
     	$httpProvider.interceptors.push('cacheBuster');
+    	$routeProvider.when('/project/null', {
+    		redirectTo : '/project'
+    	});
+    	for (var i = 0, len = SECTIONS.length; i < len; i++) {
+    		$routeProvider.when('/project/null/section/' + SECTIONS[i].id, {
+    			redirectTo : '/project'
+    		});
+    	}
         $routeProvider.when('/project/:projectId/section/:sectionId', {
             templateUrl : function getTemplateUrl(routeParams) {
                 var ret = 'partials/' + DEFAULT_SECTION_ID + '.html';
@@ -98,7 +106,7 @@ angular.module('myooApp', ['ngRoute'])
             $scope.userState.currentSectionId = $route.current.params.sectionId;
         });
         $scope.$watch('userState.mobileCurrentProjectId', function doOnMobileCurrentProjectIdChange(newValue, oldValue) {
-        	if (angular.isDefined(newValue) && angular.isDefined(oldValue) && newValue !== oldValue) {
+        	if (angular.isDefined(newValue) && newValue !== oldValue) {
         		if (angular.isDefined($scope.userState.currentSectionId)) {
         			$location.path('/project/' + newValue + '/section/' + $scope.userState.currentSectionId);
         		} else {

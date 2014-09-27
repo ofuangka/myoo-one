@@ -12,17 +12,16 @@
 							: 'medium' | dash }}</small></td>
 				</tr>
 				<tr class="form-group">
-					<td><label for="projectName">Project name</label> <input
-						id="projectName" class="form-control" maxlength="100"
-						placeholder="Project name"
-						data-ng-model="(getProjectById(userState.currentProjectId)).name"
-						data-save-on-event="blur" data-save-url="'api/projects'"
-						data-save-post-data="(getProjectById(userState.currentProjectId))" /></td>
+					<td><label for="projectName">Project name</label> <textarea
+							id="projectName" class="form-control" rows="2"
+							data-ng-model="(getProjectById(userState.currentProjectId)).name"
+							data-save-on-event="blur" data-save-url="'api/projects'"
+							data-save-post-data="(getProjectById(userState.currentProjectId))"></textarea></td>
 				</tr>
 				<tr class="form-group">
 					<td><label for="projectDescription">Project
 							description</label> <textarea id="projectDescription"
-							class="form-control" rows="3"
+							class="form-control" rows="4"
 							data-ng-model="(getProjectById(userState.currentProjectId)).description"
 							data-save-on-event="blur" data-save-url="'api/projects'"
 							data-save-post-data="(getProjectById(userState.currentProjectId))"></textarea></td>
@@ -98,14 +97,14 @@
 				</div>
 				<div class="modal-body">
 					<div class="form-group">
-						<label for="achievementName">Name</label> <input
-							id="achievementName" class="form-control" placeholder="Name"
-							data-ng-model="userState.currentAchievement.name" />
+						<label for="achievementName">Name</label>
+						<textarea id="achievementName" class="form-control" rows="2"
+							data-ng-model="userState.currentAchievement.name"></textarea>
 					</div>
 					<div class="form-group">
 						<label for="achievementDescription">Description</label>
 						<textarea id="achievementDescription" class="form-control"
-							rows="3" data-ng-model="userState.currentAchievement.description"></textarea>
+							rows="4" data-ng-model="userState.currentAchievement.description"></textarea>
 					</div>
 					<div class="form-group">
 						<label for="achievementPoints">Points</label> <input
