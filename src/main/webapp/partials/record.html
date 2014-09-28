@@ -57,9 +57,8 @@
 		<tbody>
 			<tr
 				data-ng-repeat="achievement in userState.achievements | filter : { name : searchQuery, completed : true } | orderBy : 'name'">
-				<td class="text-center"><a class="thumbnail"><img
-						data-ng-src="{{ achievement.src }}" class="achievementIcon"
-						alt="Achievement icon" /><br />
+				<td class="text-center"><a class="thumbnail"><span
+						class="achievementIcon" title="Achievement icon" style="background-position-x: {{ achievement.backgroundPositionX }}px; background-position-y: {{ achievement.backgroundPositionY }}px"></span><br />
 					<span class="badge">{{ achievement.points }}&mu;</span></a></td>
 				<td><dl>
 						<dt>{{ achievement.name }}</dt>
