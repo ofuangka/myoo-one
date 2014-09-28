@@ -2,6 +2,7 @@ package myoo.api;
 
 import myoo.dao.AchievementDao;
 import myoo.dao.ProjectDao;
+import myoo.dao.RecordDao;
 import myoo.dao.SubscriptionDao;
 import myoo.dao.UserDao;
 import myoo.dto.Project;
@@ -38,6 +39,9 @@ public class ProjectController extends BaseController {
 
 	@Autowired
 	private AchievementDao achievementDao;
+	
+	@Autowired
+	private RecordDao recordDao;
 
 	@RequestMapping(value = { "/projects" }, method = { org.springframework.web.bind.annotation.RequestMethod.GET })
 	public View projects(ModelMap model) {
@@ -77,6 +81,7 @@ public class ProjectController extends BaseController {
 
 		if (currentUserNickname.equalsIgnoreCase(project.getCreatedBy()) || userDao.isUserAdmin()) {
 			subscriptionDao.deleteByProjectId(projectId);
+			recordDao.deleteByProjectId(projectId);
 			achievementDao.deleteByProjectId(projectId);
 			projectDao.delete(projectId);
 		} else {

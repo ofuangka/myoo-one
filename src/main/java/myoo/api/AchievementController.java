@@ -1,6 +1,7 @@
 package myoo.api;
 
 import myoo.dao.AchievementDao;
+import myoo.dao.RecordDao;
 import myoo.dao.UserDao;
 import myoo.dto.Achievement;
 import myoo.ext.BaseController;
@@ -27,6 +28,9 @@ public class AchievementController extends BaseController {
 
 	@Autowired
 	private AchievementDao achievementDao;
+	
+	@Autowired
+	private RecordDao recordDao;
 
 	@Autowired
 	private UserDao userDao;
@@ -60,6 +64,7 @@ public class AchievementController extends BaseController {
 
 	@RequestMapping(value = { "/projects/{projectId}/achievements/{achievementId}" }, method = { org.springframework.web.bind.annotation.RequestMethod.DELETE })
 	public View deleteAchievement(@PathVariable String projectId, @PathVariable String achievementId, ModelMap model) {
+		recordDao.deleteByAchievementId(achievementId);
 		achievementDao.delete(achievementId);
 		return new MappingJackson2JsonView();
 	}

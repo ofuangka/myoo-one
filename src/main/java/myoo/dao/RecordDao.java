@@ -127,12 +127,20 @@ public class RecordDao extends BaseDao {
 	}
 
 	private Filter getFilterByProjectIdByUserId(String projectId, String userId) {
-		return CompositeFilterOperator.and(FilterOperator.EQUAL.of("projectId", projectId), FilterOperator.EQUAL.of("userId", userId));
+		return CompositeFilterOperator.and(getFilterByProjectId(projectId), FilterOperator.EQUAL.of("userId", userId));
 	}
 
 	public void deleteByProjectIdByUserId(String projectId, String userId) {
+		deleteByFilter(getFilterByProjectIdByUserId(projectId, userId));
+	}
+	
+	private Filter getFilterByProjectId(String projectId) {
+		return FilterOperator.EQUAL.of("projectId", projectId);
+	}
+	
+	private void deleteByFilter(Filter filter) {
 		Query query = new Query("Record");
-		query.setFilter(getFilterByProjectIdByUserId(projectId, userId));
+		query.setFilter(filter);
 		List<Entity> recordEntities = getDatastore().prepare(query).asList(FetchOptions.Builder.withDefaults());
 		if (recordEntities != null) {
 			List<Key> recordKeys = new ArrayList<Key>();
@@ -141,6 +149,17 @@ public class RecordDao extends BaseDao {
 			}
 			getDatastore().delete(recordKeys);
 		}
-
+	}
+	
+	public void deleteByProjectId(String projectId) {
+		deleteByFilter(getFilterByProjectId(projectId));
+	}
+	
+	private Filter getFilterByAchievementId(String achievementId) {
+		return FilterOperator.EQUAL.of("achievementId", achievementId);
+	}
+	
+	public void deleteByAchievementId(String achievementId) {
+		deleteByFilter(getFilterByAchievementId(achievementId));
 	}
 }
