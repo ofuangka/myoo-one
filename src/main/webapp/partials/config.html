@@ -40,14 +40,14 @@
 					<th>Badge</th>
 					<th>Name</th>
 					<th class="hidden-xs" width="55%">Description</th>
-					<th width="15%">Points</th>
+					<th class="hidden-xs" width="15%">Points</th>
 					<!-- <th class="visible-xs" width="1%"></th> -->
 					<th width="1%"></th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr data-ng-repeat="achievement in userState.achievements">
-					<td class="text-center"><a class="thumbnail"><span
+					<td class="text-center"><a class="thumbnail" data-ng-click="showBadgeSelect(achievement)"><span
 							class="achievementIcon" title="Achievement icon"
 							style="background-position-x: {{ achievement.backgroundPositionX }}px; background-position-y: {{ achievement.backgroundPositionY }}px"></span></a></td>
 					<td><input class="form-control hidden-xs" maxlength="100"
@@ -60,11 +60,11 @@
 						data-ng-model="achievement.description" data-save-on-event="blur"
 						data-save-url="'api/projects/' + userState.currentProjectId + '/achievements'"
 						data-save-post-data="achievement" /></td>
-					<td><input class="form-control hidden-xs" type="number"
+					<td class="hidden-xs"><input class="form-control" type="number"
 						maxlength="3" placeholder="Points"
 						data-ng-model="achievement.points" data-save-on-event="blur"
 						data-save-url="'api/projects/' + userState.currentProjectId + '/achievements'"
-						data-save-post-data="achievement" /><span class="visible-xs">{{ achievement.points }}</span></td>
+						data-save-post-data="achievement" /></td>
 					<td class="text-center">
 						<button class="btn btn-default"
 							data-ng-click="editAchievement(achievement)">
@@ -77,7 +77,7 @@
 					<td></td>
 					<td></td>
 					<td class="hidden-xs"></td>
-					<td></td>
+					<td class="hidden-xs"></td>
 					<td class="text-center">
 						<button class="btn btn-default hidden-xs"
 							data-ng-click="addAchievement()">Add</button>
@@ -99,35 +99,129 @@
 					<button type="button" class="close" data-dismiss="modal">
 						<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
 					</button>
-					<h4 class="modal-title">Edit</h4>
+					<h4 class="modal-title">Edit achievement</h4>
 				</div>
 				<div class="modal-body">
-					<div class="form-group text-center">
-						<a class="badgePopover thumbnail"><span
-							class="achievementIcon" title="Achievement icon"
-							style="background-position-x: {{ userState.currentAchievement.backgroundPositionX }}px; background-position-y: {{ userState.currentAchievement.backgroundPositionY }}px"></span></a>
-					</div>
 					<div class="form-group">
 						<label for="achievementName">Name</label>
 						<textarea id="achievementName" class="form-control" rows="2"
-							data-ng-model="userState.currentAchievement.name"></textarea>
+							data-ng-model="userState.currentAchievement.name"
+							data-save-on-event="blur"
+							data-save-url="'api/projects/' + userState.currentProjectId + '/achievements'"
+							data-save-post-data="userState.currentAchievement"></textarea>
 					</div>
 					<div class="form-group">
 						<label for="achievementDescription">Description</label>
 						<textarea id="achievementDescription" class="form-control"
-							rows="4" data-ng-model="userState.currentAchievement.description"></textarea>
+							rows="4" data-ng-model="userState.currentAchievement.description"
+							data-save-on-event="blur"
+							data-save-url="'api/projects/' + userState.currentProjectId + '/achievements'"
+							data-save-post-data="userState.currentAchievement"></textarea>
 					</div>
 					<div class="form-group">
 						<label for="achievementPoints">Points</label> <input
 							id="achievementPoints" class="form-control" type="number"
 							placeholder="Points"
-							data-ng-model="userState.currentAchievement.points" />
+							data-ng-model="userState.currentAchievement.points"
+							data-save-on-event="blur"
+							data-save-url="'api/projects/' + userState.currentProjectId + '/achievements'"
+							data-save-post-data="userState.currentAchievement" />
 					</div>
 					<div class="form-group text-center">
 						<button type="button" class="btn btn-danger"
 							data-ng-click="deleteAchievement(userState.currentAchievement)">Delete
 							achievement</button>
 					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="badgeBox" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="Badge" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">
+						<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+					</button>
+					<h4 class="modal-title">Select badge</h4>
+				</div>
+				<div class="modal-body text-center">
+					<a data-ng-repeat="x in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]"
+						data-badge-selector="userState.currentAchievement"
+						data-width="48"
+						data-height="48"
+						data-rel-x="{{ x }}"
+						data-rel-y="0"
+						data-save-url="'api/projects/' + userState.currentProjectId + '/achievements'"></a><a data-ng-repeat="x in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]"
+						data-badge-selector="userState.currentAchievement"
+						data-width="48"
+						data-height="48"
+						data-rel-x="{{ x }}"
+						data-rel-y="1"
+						data-save-url="'api/projects/' + userState.currentProjectId + '/achievements'"></a><a data-ng-repeat="x in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]"
+						data-badge-selector="userState.currentAchievement"
+						data-width="48"
+						data-height="48"
+						data-rel-x="{{ x }}"
+						data-rel-y="2"
+						data-save-url="'api/projects/' + userState.currentProjectId + '/achievements'"></a><a data-ng-repeat="x in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]"
+						data-badge-selector="userState.currentAchievement"
+						data-width="48"
+						data-height="48"
+						data-rel-x="{{ x }}"
+						data-rel-y="3"
+						data-save-url="'api/projects/' + userState.currentProjectId + '/achievements'"></a><a data-ng-repeat="x in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]"
+						data-badge-selector="userState.currentAchievement"
+						data-width="48"
+						data-height="48"
+						data-rel-x="{{ x }}"
+						data-rel-y="4"
+						data-save-url="'api/projects/' + userState.currentProjectId + '/achievements'"></a><a data-ng-repeat="x in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]"
+						data-badge-selector="userState.currentAchievement"
+						data-width="48"
+						data-height="48"
+						data-rel-x="{{ x }}"
+						data-rel-y="5"
+						data-save-url="'api/projects/' + userState.currentProjectId + '/achievements'"></a><a data-ng-repeat="x in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]"
+						data-badge-selector="userState.currentAchievement"
+						data-width="48"
+						data-height="48"
+						data-rel-x="{{ x }}"
+						data-rel-y="6"
+						data-save-url="'api/projects/' + userState.currentProjectId + '/achievements'"></a><a data-ng-repeat="x in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]"
+						data-badge-selector="userState.currentAchievement"
+						data-width="48"
+						data-height="48"
+						data-rel-x="{{ x }}"
+						data-rel-y="6"
+						data-save-url="'api/projects/' + userState.currentProjectId + '/achievements'"></a><a data-ng-repeat="x in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]"
+						data-badge-selector="userState.currentAchievement"
+						data-width="48"
+						data-height="48"
+						data-rel-x="{{ x }}"
+						data-rel-y="8"
+						data-save-url="'api/projects/' + userState.currentProjectId + '/achievements'"></a><a data-ng-repeat="x in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]"
+						data-badge-selector="userState.currentAchievement"
+						data-width="48"
+						data-height="48"
+						data-rel-x="{{ x }}"
+						data-rel-y="9"
+						data-save-url="'api/projects/' + userState.currentProjectId + '/achievements'"></a><a data-ng-repeat="x in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]"
+						data-badge-selector="userState.currentAchievement"
+						data-width="48"
+						data-height="48"
+						data-rel-x="{{ x }}"
+						data-rel-y="10"
+						data-save-url="'api/projects/' + userState.currentProjectId + '/achievements'"></a><a data-ng-repeat="x in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]"
+						data-badge-selector="userState.currentAchievement"
+						data-width="48"
+						data-height="48"
+						data-rel-x="{{ x }}"
+						data-rel-y="11"
+						data-save-url="'api/projects/' + userState.currentProjectId + '/achievements'"></a>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

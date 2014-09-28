@@ -10,6 +10,15 @@ a, .cursor-pointer {
 	width: 48px;
 	height: 48px;
 }
+.badgeSelector {
+	display: inline-block;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	margin: 5px;
+}
+.badgeSelector:active {
+	background-color: #ddd;
+}
 .thumbnail {
 	display: inline-block;
 }

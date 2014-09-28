@@ -20,7 +20,7 @@
 <body data-ng-controller="rootCtrl">
 	<div class="container-fluid">
 		<h1>
-			<a>/myoo/</a> <small>Ask for it by name</small>
+			<a>/myoo/</a> <small class="hidden-xs">Ask for it by name</small>
 		</h1>
 		<div class="panel panel-info">
 			<div class="panel-heading">
@@ -168,6 +168,7 @@
 	<script src="filters/dash.js"></script>
 	<script src="directives/save-on-event.js"></script>
 	<script src="directives/resizing-chart.js"></script>
+	<script src="directives/badge-selector.js"></script>
 	<script src="controllers/record.js"></script>
 	<script src="controllers/review.js"></script>
 	<script src="controllers/config.js"></script>

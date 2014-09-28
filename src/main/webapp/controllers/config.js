@@ -3,10 +3,20 @@ angular.module('myooApp')
     	$('#editBox').modal({
     		show : false
     	});
+    	$('#badgeBox').modal({
+    		show : false
+    	});
     	$scope.editAchievement = function(achievement) {
     		$scope.userState.currentAchievement = achievement;
     		$('#editBox').modal('show');
     	};
+    	$scope.showBadgeSelect = function(achievement) {
+    		$scope.userState.currentAchievement = achievement;
+    		$('#badgeBox').modal('show');
+    	};
+    	$scope.$on('badgeSelectorChangeSuccess', function() {
+    		$('#badgeBox').modal('hide');
+    	});
     	$scope.addAchievement = function() {
         	$http.post('api/projects/' + $scope.userState.currentProjectId + '/achievements', {
         		
