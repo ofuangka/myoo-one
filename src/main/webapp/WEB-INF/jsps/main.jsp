@@ -35,7 +35,7 @@
 			<div class="panel-body">
 				<div class="row">
 					<div
-						class="col-md-offset-3 col-sm-offset-4 col-md-9 col-sm-8 padding-md">
+						class="col-lg-offset-2 col-md-offset-3 col-sm-offset-4 col-lg-10 col-md-9 col-sm-8 padding-md">
 						<ul class="nav nav-pills">
 							<li data-ng-repeat="section in userState.sections"
 								data-ng-class="{ 'active' : section.id === userState.currentSectionId }">
@@ -48,7 +48,7 @@
 					</div>
 				</div>
 				<div class="row" data-ng-cloak>
-					<div class="col-md-3 col-sm-4">
+					<div class="col-lg-2 col-md-3 col-sm-4">
 						<ul class="nav nav-pills nav-stacked hidden-xs" data-ng-cloak>
 							<li
 								data-ng-repeat="project in userState.projects | orderBy : 'id' | filter : isSubscribed"
@@ -69,7 +69,7 @@
 								Create project</button>
 						</div>
 					</div>
-					<div class="col-md-9 col-sm-8 padding-md">
+					<div class="col-lg-10 col-md-9 col-sm-8 padding-md">
 						<div id="alertMsg" class="alert alert-danger" role="alert" style="display: none;">
 							<button type="button" class="close">
 								<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
