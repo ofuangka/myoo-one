@@ -1,3 +1,3 @@
 myoo-one
 ========
-A generic gamification app written using AngularJS
+My first generic gamification app written using AngularJS
